@@ -19,18 +19,22 @@ setuptools.setup(
     version="0.0b0",
     author="A. & M. Mathis Labs",
     author_email="alexander@deeplabcut.org",
-    description="Markerless pose-estimation of user-defined features with deep learning",
+    description="Lightweight library supporting universal functions for the DeepLabCut ecosystem",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/DeepLabCut/DLClib",
     install_requires=[
-        "numpy>=1.18.5",
-        "pandas>=1.0.1",
-        "scikit-image>=0.17,<=0.18.1",
-        "scikit-learn>=1.0",
-        "scipy>=1.4",
+        "huggingface_hub",
     ],
     packages=setuptools.find_packages(),
+    data_files=[
+        (
+            "dlclibrary",
+            [
+            "dlclibrary/modelzoo_urls.yaml",
+            ],
+        )
+    ],
     include_package_data=True,
     classifiers=[
         "Programming Language :: Python :: 3",
