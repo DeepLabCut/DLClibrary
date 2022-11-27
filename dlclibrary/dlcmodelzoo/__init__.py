@@ -1,24 +1,10 @@
-# just expand this list with new projects
-
-Modeloptions = [
-    "full_human",
-    "full_cat",
-    "primate_face",
-    "mouse_pupil_vclose",
-    "horse_sideview",
-    "full_macaque",
-    "superanimal_mouse",
-]
-
-"""
-Modeloptions = [
-    "full_human",
-    "full_cat",
-    "full_dog",
-    "primate_face",
-    "mouse_pupil_vclose",
-    "horse_sideview",
-    "full_macaque",
-    "full_cheetah",
-]  # just expand this list with new projects
-"""
+#
+# DeepLabCut Toolbox (deeplabcut.org)
+# © A. & M.W. Mathis Labs
+# https://github.com/DeepLabCut/DeepLabCut
+#
+# Please see AUTHORS for contributors.
+# https://github.com/DeepLabCut/DeepLabCut/blob/master/AUTHORS
+#
+# Licensed under GNU Lesser General Public License v3.0
+#

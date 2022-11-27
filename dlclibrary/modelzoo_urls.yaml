@@ -1,3 +1,15 @@
+##
+## DeepLabCut Toolbox (deeplabcut.org)
+## © A. & M.W. Mathis Labs
+## https://github.com/DeepLabCut/DeepLabCut
+##
+## Please see AUTHORS for contributors.
+## https://github.com/DeepLabCut/DeepLabCut/blob/master/AUTHORS
+##
+## Licensed under GNU Lesser General Public License v3.0
+##
+
+
 
 #Model Zoo from HuggingFace
 full_human: mwmathis/DeepLabCutModelZoo-DLC_human_fullbody_resnet_101/DLC_human_fullbody_resnet_101.tar.gz
