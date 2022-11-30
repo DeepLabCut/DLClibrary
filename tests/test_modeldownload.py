@@ -15,7 +15,7 @@ def test_catdownload(tmp_path_factory):
     # TODO: just download the lightweight stuff..
     import dlclibrary, os
 
-    folder = tmp_path_factory.mkdir("cat")
+    folder = tmp_path_factory.mktemp("cat")
     dlclibrary.download_hugginface_model("full_cat", str(folder))
 
     assert os.path.exists(folder / "pose_cfg.yaml")
