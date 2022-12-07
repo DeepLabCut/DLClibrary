@@ -38,7 +38,7 @@ def _loadmodelnames():
         return YAML().load(file)
 
 
-def download_hugginface_model(modelname, target_dir=".", removeHFfolder=True):
+def download_huggingface_model(modelname, target_dir=".", removeHFfolder=True):
     """
     Downloads a DeepLabCut Model Zoo Project from Hugging Face
 

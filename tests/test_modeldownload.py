@@ -16,7 +16,7 @@ def test_catdownload(tmp_path_factory):
     import dlclibrary, os
 
     folder = tmp_path_factory.mktemp("cat")
-    dlclibrary.download_hugginface_model("full_cat", str(folder))
+    dlclibrary.download_huggingface_model("full_cat", str(folder))
 
     assert os.path.exists(folder / "pose_cfg.yaml")
     assert os.path.exists(folder / "snapshot-75000.meta")
