@@ -11,16 +11,12 @@
 import pytest
 
 
-def test_catdownload():
+def test_catdownload(tmp_path_factory):
     # TODO: just download the lightweight stuff..
     import dlclibrary, os
 
-    os.mkdir("cat")
-    dlclibrary.download_hugginface_model("full_cat", "cat")
+    folder = tmp_path_factory.mktemp("cat")
+    dlclibrary.download_hugginface_model("full_cat", str(folder))
 
-    assert os.path.exists("cat/pose_cfg.yaml")
-    assert os.path.exists("cat/snapshot-75000.meta")
-
-    import shutil
-
-    shutil.rmtree("cat")
+    assert os.path.exists(folder / "pose_cfg.yaml")
+    assert os.path.exists(folder / "snapshot-75000.meta")
