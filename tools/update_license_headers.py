@@ -28,7 +28,7 @@ def load_config(filename):
 
 
 def walk_directory(entry):
-    """Talk the directory"""
+    """Walk the directory"""
 
     if "header" not in entry:
         raise ValueError("Current entry does not have a header.")
