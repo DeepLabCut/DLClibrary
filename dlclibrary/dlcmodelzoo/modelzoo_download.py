@@ -97,15 +97,3 @@ def download_huggingface_model(modelname, target_dir=".", removeHFfolder=True):
         models = [fn for fn in neturls.keys()]
         print("Model does not exist: ", modelname)
         print("Pick one of the following: ", MODELOPTIONS)
-
-
-if __name__ == "__main__":
-    print("Randomly downloading a model for testing...")
-
-    import random
-
-    # modelname = 'full_cat'
-    modelname = random.choice(MODELOPTIONS)
-
-    target_dir = "/Users/alex/Downloads"  # folder has to exist!
-    download_hugginface_model(modelname, target_dir)
