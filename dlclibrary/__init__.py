@@ -9,5 +9,5 @@
 # Licensed under GNU Lesser General Public License v3.0
 #
 
-from dlclibrary.dlcmodelzoo.modelzoo_download import download_hugginface_model
+from dlclibrary.dlcmodelzoo.modelzoo_download import download_huggingface_model
 from dlclibrary.version import __version__, VERSION

@@ -29,7 +29,7 @@ def _get_dlclibrary_path():
     return os.path.split(importlib.util.find_spec("dlclibrary").origin)[0]
 
 
-def _loadmodelnames():
+def _load_model_names():
     """Loads URLs and commit hashes for available models."""
     from ruamel.yaml import YAML
 
@@ -38,7 +38,7 @@ def _loadmodelnames():
         return YAML().load(file)
 
 
-def download_huggingface_model(modelname, target_dir=".", removeHFfolder=True):
+def download_huggingface_model(modelname, target_dir=".", remove_hf_folder=True):
     """
     Downloads a DeepLabCut Model Zoo Project from Hugging Face
 
@@ -48,52 +48,40 @@ def download_huggingface_model(modelname, target_dir=".", removeHFfolder=True):
         Name of the ModelZoo model. For visualizations see: http://www.mackenziemathislab.org/dlc-modelzoo
     target_dir : directory (as string)
         Directory where to store the model weigths and pose_cfg.yaml file
-    removeHFfolder : bool, default True
+    remove_hf_folder : bool, default True
         Whether to remove the directory structure provided by HuggingFace after downloading and decompressing data into DeepLabCut format.
     """
     from huggingface_hub import hf_hub_download
-    import tarfile, os
+    import tarfile
     from pathlib import Path
 
-    neturls = _loadmodelnames()
+    neturls = _load_model_names()
+    if modelname not in neturls:
+        raise ValueError(f"`modelname` should be one of: {', '.join(modelname)}.")
 
-    if modelname in neturls.keys():
-        print("Loading....", modelname)
-        url = neturls[modelname].split("/")
-        repo_id, targzfn = url[0] + "/" + url[1], str(url[-1])
+    print("Loading....", modelname)
+    url = neturls[modelname].split("/")
+    repo_id, targzfn = url[0] + "/" + url[1], str(url[-1])
 
-        hf_hub_download(repo_id, targzfn, cache_dir=str(target_dir))
-        # creates a new subfolder as indicated below, unzipping from there and deleting this folder
+    hf_hub_download(repo_id, targzfn, cache_dir=str(target_dir))
 
-        # Building the HuggingFaceHub download path:
-        hf_path = (
-            "models--"
-            + url[0]
-            + "--"
-            + url[1]
-            + "/snapshots/"
-            + str(neturls[modelname + "_commit"])
-            + "/"
-            + targzfn
-        )
+    # Create a new subfolder as indicated below, unzipping from there and deleting this folder
+    hf_folder = f"models--{url[0]}--{url[1]}"
+    hf_path = os.path.join(
+        hf_folder,
+        "snapshots",
+        str(neturls[modelname + "_commit"]),
+        targzfn,
+    )
 
-        filename = os.path.join(target_dir, hf_path)
-        with tarfile.open(filename, mode="r:gz") as tar:
-            for member in tar:
-                if not member.isdir():
-                    fname = Path(member.name).name  # getting the filename
-                    tar.makefile(member, target_dir + "/" + fname)
-                    # tar.extractall(target_dir, members=tarfilenamecutting(tar))
+    filename = os.path.join(target_dir, hf_path)
+    with tarfile.open(filename, mode="r:gz") as tar:
+        for member in tar:
+            if not member.isdir():
+                fname = Path(member.name).name
+                tar.makefile(member, os.path.join(target_dir, fname))
 
-        if removeHFfolder:
-            # Removing folder
-            import shutil
+    if remove_hf_folder:
+        import shutil
 
-            shutil.rmtree(
-                Path(os.path.join(target_dir, "models--" + url[0] + "--" + url[1]))
-            )
-
-    else:
-        models = [fn for fn in neturls.keys()]
-        print("Model does not exist: ", modelname)
-        print("Pick one of the following: ", MODELOPTIONS)
+        shutil.rmtree(os.path.join(target_dir, hf_folder))
