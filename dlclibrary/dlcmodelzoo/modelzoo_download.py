@@ -30,7 +30,7 @@ def _get_dlclibrary_path():
 
 
 def _load_model_names():
-    """Loads URLs and commit hashes for available models."""
+    """Load URLs and commit hashes for available models."""
     from ruamel.yaml import YAML
 
     fn = os.path.join(_get_dlclibrary_path(), "modelzoo_urls.yaml")
@@ -40,14 +40,14 @@ def _load_model_names():
 
 def download_huggingface_model(modelname, target_dir=".", remove_hf_folder=True):
     """
-    Downloads a DeepLabCut Model Zoo Project from Hugging Face
+    Download a DeepLabCut Model Zoo Project from Hugging Face
 
     Parameters
     ----------
     modelname : string
         Name of the ModelZoo model. For visualizations see: http://www.mackenziemathislab.org/dlc-modelzoo
     target_dir : directory (as string)
-        Directory where to store the model weigths and pose_cfg.yaml file
+        Directory where to store the model weights and pose_cfg.yaml file
     remove_hf_folder : bool, default True
         Whether to remove the directory structure provided by HuggingFace after downloading and decompressing data into DeepLabCut format.
     """
