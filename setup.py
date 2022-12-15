@@ -24,6 +24,7 @@ setuptools.setup(
     url="https://github.com/DeepLabCut/DLClib",
     install_requires=[
         "huggingface_hub",
+        "ruamel.yaml>=0.15.0",
     ],
     packages=setuptools.find_packages(),
     data_files=[
