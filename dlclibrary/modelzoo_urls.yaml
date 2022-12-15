@@ -12,8 +12,8 @@
 
 
 #Model Zoo from HuggingFace
-full_human: mwmathis/DeepLabCutModelZoo-DLC_human_fullbody_resnet_101/DLC_human_fullbody_resnet_101.tar.gz
-full_human_commit: 7438131c2ee7754a9732bef6fbf46b8189a16c48
+full_human: mwmathis/DeepLabCutModelZoo-DLC_human_fullbody_resnet_101/DLC_human_dancing_resnet_101_iteration-0_shuffle-1.tar.gz
+full_human_commit: 01acf989bfec7a25110b94677449d9e861b5ea81
 full_cat: AlexEMG/DeepLabCutModelZoo-cat/DLC_Cat_resnet_50_iteration-0_shuffle-0.tar.gz
 full_cat_commit: 972f82dc575c820ce556e140465495a32d18ee9b
 full_dog: AlexEMG/DeepLabCutModelZoo-dog/DLC_Dog_resnet_50_iteration-0_shuffle-0.tar.gz
