@@ -1,2 +1,3 @@
 huggingface_hub==0.11.1
 ruamel.yaml==0.17.21
+dlclibrary
