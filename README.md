@@ -7,3 +7,9 @@ DLClibrary is a lightweight library supporting universal functions for the DeepL
 
 Supported functions (at this point):
 - API for downloading model weights from the model zoo
+
+# Quick start 
+
+`pip install dlclibrary`
+
+- warning, the closely named package `dlclib` is not an official DeepLabCut product.
