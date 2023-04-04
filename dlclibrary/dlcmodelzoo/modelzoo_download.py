@@ -8,6 +8,7 @@
 #
 # Licensed under GNU Lesser General Public License v3.0
 #
+import json
 import os
 
 # just expand this list when adding new models:
@@ -34,9 +35,16 @@ def _load_model_names():
     """Load URLs and commit hashes for available models."""
     from ruamel.yaml import YAML
 
-    fn = os.path.join(_get_dlclibrary_path(), "modelzoo_urls.yaml")
+    fn = os.path.join(_get_dlclibrary_path(), "dlcmodelzoo", "modelzoo_urls.yaml")
     with open(fn) as file:
         return YAML().load(file)
+
+
+def parse_available_supermodels():
+    libpath = _get_dlclibrary_path()
+    json_path = os.path.join(libpath, "dlcmodelzoo", "superanimal_models.json")
+    with open(json_path) as file:
+        return json.load(file)
 
 
 def download_huggingface_model(modelname, target_dir=".", remove_hf_folder=True):

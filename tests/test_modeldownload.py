@@ -29,6 +29,12 @@ def test_download_huggingface_wrong_model():
         dlclibrary.download_huggingface_model("wrong_model_name")
 
 
+def test_parse_superanimal_models():
+    dict_ = dlclibrary.parse_available_supermodels()
+    assert "superanimal_quadruped" in dict_
+    assert "superanimal_topviewmouse" in dict_
+
+
 @pytest.mark.skip
 @pytest.mark.parametrize("model", MODELOPTIONS)
 def test_download_all_models(tmp_path_factory, model):
