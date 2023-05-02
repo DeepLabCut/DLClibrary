@@ -15,6 +15,7 @@ import os
 MODELOPTIONS = [
     "full_human",
     "full_cat",
+    "full_dog",
     "primate_face",
     "mouse_pupil_vclose",
     "horse_sideview",
