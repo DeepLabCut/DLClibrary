@@ -3,13 +3,34 @@
 
 # DLClibrary
 
-DLClibrary is a lightweight library supporting universal functions for the DeepLabCut ecosystem.
+DLClibrary is a lightweight library supporting universal functions for the [DeepLabCut](https://github.com/DeepLabCut/DeepLabCut) ecosystem.
 
 Supported functions (at this point):
-- API for downloading model weights from the model zoo
 
-# Quick start 
+- API for downloading model weights from [the model zoo](http://www.mackenziemathislab.org/dlc-modelzoo)
 
-`pip install dlclibrary`
+# Quick start
 
-- warning, the closely named package `dlclib` is not an official DeepLabCut product.
+## Install
+
+The package can be installed using `pip`:
+
+```bash
+pip install dlclibrary
+```
+
+:warning: warning, the closely named package `dlclib` is not an official DeepLabCut product. :warning:
+
+## Example Usage
+
+Downloading a pretrained model from the model zoo:
+
+```python
+from pathlib import Path
+from dlclibrary import download_huggingface_model
+
+# Creates a folder and downloads the model to it
+model_dir = Path("./superanimal_quadruped_model")
+model_dir.mkdir()
+download_huggingface_model("superanimal_quadruped", model_dir)
+```
