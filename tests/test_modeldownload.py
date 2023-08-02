@@ -35,7 +35,8 @@ def test_parse_superanimal_models():
     assert "superanimal_topviewmouse" in dict_
 
 
-@pytest.mark.skip
+#@pytest.mark.skip # Not skipping as rarely run!
 @pytest.mark.parametrize("model", MODELOPTIONS)
 def test_download_all_models(tmp_path_factory, model):
+    print("Downloading ...", model)
     test_download_huggingface_model(tmp_path_factory, model)
