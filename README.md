@@ -34,3 +34,14 @@ model_dir = Path("./superanimal_quadruped_model")
 model_dir.mkdir()
 download_huggingface_model("superanimal_quadruped", model_dir)
 ```
+
+## How to add a new model?
+
+Pick a good model_name. Follow the (novel) naming convention (modeltype_species), e.g. ```superanimal_topviewmouse```.  
+
+1. Add the model_name with path and commit ID to: https://github.com/DeepLabCut/DLClibrary/blob/main/dlclibrary/dlcmodelzoo/modelzoo_urls.yaml
+
+2. Add the model name to the constant: MODELOPTIONS
+https://github.com/DeepLabCut/DLClibrary/blob/main/dlclibrary/dlcmodelzoo/modelzoo_download.py#L15
+
+3. For superanimal models also fill in the configs!
