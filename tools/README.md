@@ -13,8 +13,8 @@ from the repository root (this needs `pip install licenseheaders`)
 You can edit the `NOTICE.yml` to update the header.
 
 
-## Running tests
+## Running tests [with more details](https://docs.pytest.org/en/latest/how-to/capture-stdout-stderr.html)
 
 ``` bash
-pytest
+pytest -s
 ```
