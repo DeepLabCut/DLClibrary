@@ -22,6 +22,7 @@ MODELOPTIONS = [
     "full_macaque",
     "superanimal_topviewmouse",
     "superanimal_quadruped",
+    "superanimal_quadruped_HRNetw32",
 ]
 
 
@@ -85,11 +86,14 @@ def download_huggingface_model(modelname, target_dir=".", remove_hf_folder=True)
     )
 
     filename = os.path.join(target_dir, hf_path)
-    with tarfile.open(filename, mode="r:gz") as tar:
-        for member in tar:
-            if not member.isdir():
-                fname = Path(member.name).name
-                tar.makefile(member, os.path.join(target_dir, fname))
+    try:
+        with tarfile.open(filename, mode="r:gz") as tar:
+            for member in tar:
+                if not member.isdir():
+                    fname = Path(member.name).name
+                    tar.makefile(member, os.path.join(target_dir, fname))
+    except tarfile.ReadError:  # The model is a .pt file
+        os.rename(filename, os.path.join(target_dir, targzfn))
 
     if remove_hf_folder:
         import shutil
