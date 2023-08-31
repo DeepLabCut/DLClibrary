@@ -23,6 +23,7 @@ MODELOPTIONS = [
     "superanimal_topviewmouse",
     "superanimal_quadruped",
     "superanimal_quadruped_HRNetw32",
+    "superanimal_quadruped_ATP",
 ]
 
 
