@@ -66,35 +66,43 @@ def download_huggingface_model(modelname, target_dir=".", remove_hf_folder=True)
     from huggingface_hub import hf_hub_download
     import tarfile
     from pathlib import Path
+    from ruamel.yaml.comments import CommentedBase
 
     neturls = _load_model_names()
     if modelname not in neturls:
         raise ValueError(f"`modelname` should be one of: {', '.join(modelname)}.")
 
     print("Loading....", modelname)
-    url = neturls[modelname].split("/")
-    repo_id, targzfn = url[0] + "/" + url[1], str(url[-1])
+    urls = neturls[modelname]
+    if isinstance(urls, CommentedBase):
+        urls = list(urls)
+    else:
+        urls = [urls]
 
-    hf_hub_download(repo_id, targzfn, cache_dir=str(target_dir))
+    for url in urls:
+        url = url.split("/")
+        repo_id, targzfn = url[0] + "/" + url[1], str(url[-1])
 
-    # Create a new subfolder as indicated below, unzipping from there and deleting this folder
-    hf_folder = f"models--{url[0]}--{url[1]}"
-    hf_path = os.path.join(
-        hf_folder,
-        "snapshots",
-        str(neturls[modelname + "_commit"]),
-        targzfn,
-    )
+        hf_hub_download(repo_id, targzfn, cache_dir=str(target_dir))
 
-    filename = os.path.join(target_dir, hf_path)
-    try:
-        with tarfile.open(filename, mode="r:gz") as tar:
-            for member in tar:
-                if not member.isdir():
-                    fname = Path(member.name).name
-                    tar.makefile(member, os.path.join(target_dir, fname))
-    except tarfile.ReadError:  # The model is a .pt file
-        os.rename(filename, os.path.join(target_dir, targzfn))
+        # Create a new subfolder as indicated below, unzipping from there and deleting this folder
+        hf_folder = f"models--{url[0]}--{url[1]}"
+        hf_path = os.path.join(
+            hf_folder,
+            "snapshots",
+            str(neturls[modelname + "_commit"]),
+            targzfn,
+        )
+
+        filename = os.path.join(target_dir, hf_path)
+        try:
+            with tarfile.open(filename, mode="r:gz") as tar:
+                for member in tar:
+                    if not member.isdir():
+                        fname = Path(member.name).name
+                        tar.makefile(member, os.path.join(target_dir, fname))
+        except tarfile.ReadError:  # The model is a .pt file
+            os.rename(filename, os.path.join(target_dir, targzfn))
 
     if remove_hf_folder:
         import shutil
