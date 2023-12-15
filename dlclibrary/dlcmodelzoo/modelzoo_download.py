@@ -85,6 +85,9 @@ def download_huggingface_model(
     else:
         urls = [urls]
 
+    if not os.path.isabs(target_dir):
+        target_dir = os.path.abspath(target_dir)
+
     for url in urls:
         url = url.split("/")
         repo_id, targzfn = url[0] + "/" + url[1], str(url[-1])
