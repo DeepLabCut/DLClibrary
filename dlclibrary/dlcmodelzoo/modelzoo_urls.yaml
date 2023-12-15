@@ -9,36 +9,29 @@
 ## Licensed under GNU Lesser General Public License v3.0
 ##
 
-
-
 #Model Zoo from HuggingFace
 full_human: mwmathis/DeepLabCutModelZoo-DLC_human_fullbody_resnet_101/DLC_human_dancing_resnet_101_iteration-0_shuffle-1.tar.gz
-full_human_commit: 01acf989bfec7a25110b94677449d9e861b5ea81
+
 full_cat: AlexEMG/DeepLabCutModelZoo-cat/DLC_Cat_resnet_50_iteration-0_shuffle-0.tar.gz
-full_cat_commit: d39b3922a04d7077a84a05d141243c044cc18af6
+
 full_dog: AlexEMG/DeepLabCutModelZoo-dog/DLC_Dog_resnet_50_iteration-0_shuffle-0.tar.gz
-full_dog_commit: b420a859f881b3cabdfd0cc4a0eb2d1c7fb592c5
 
 primate_face: mwmathis/DeepLabCutModelZoo-primate_face/DLC_primate_face_resnet_50_iteration-1_shuffle-1.tar.gz
-primate_face_commit: df7e8f6ad38899489758e5a890b58905cfb4d893
 
 mouse_pupil_vclose: mwmathis/DeepLabCutModelZoo-mouse_pupil_vclose/DLC_mouse_pupil_vclose_resnet_50_iteration-0_shuffle-1.tar.gz
-mouse_pupil_vclose_commit: 93557f0e74390596a2b9fddaab7628a1cc79fb2d
 
 horse_sideview: mwmathis/DeepLabCutModelZoo-horse_sideview/DLC_Horses_resnet_50_iteration-1_shuffle-1.tar.gz
-horse_sideview_commit: fd0329b2ffc8fe7a5e6eb3d4850ebca75987e92c
 
 full_macaque: mwmathis/DeepLabCutModelZoo-macaque_full/DLC_macaque_full_resnet50.tar.gz
-full_macaque_commit: 4c7ebf2628d5b7eb0483356595256fb01b7e1a9e
 
-superanimal_topviewmouse: mwmathis/DeepLabCutModelZoo-SuperAnimal-TopViewMouse/DLC_ma_supertopview5k_resnet_50_iteration-0_shuffle-1.tar.gz
-superanimal_topviewmouse_commit: 1781f384b56ddb9b58c0d4acae98993b9a17e901
+superanimal_topviewmouse_dlcrnet: mwmathis/DeepLabCutModelZoo-SuperAnimal-TopViewMouse/DLC_ma_supertopview5k_resnet_50_iteration-0_shuffle-1.tar.gz
 
-superanimal_quadruped: mwmathis/DeepLabCutModelZoo-SuperAnimal-Quadruped/DLC_ma_superquadruped_resnet_50_iteration-0_shuffle-1.tar.gz
-superanimal_quadruped_commit: 673140e6dd9f7be492d77cab957f31c73a192f67
+superanimal_quadruped_dlcrnet: mwmathis/DeepLabCutModelZoo-SuperAnimal-Quadruped_DLC2/DLC_ma_superquadruped_resnet_50_iteration-0_shuffle-1.tar.gz
 
-superanimal_quadruped_HRNetw32: mwmathis/SuperAnimal_Quadruped_pt/blob/main/SuperAnimal_Quadruped_pt_HRNetw32.pth
-superanimal_quadruped_HRNetw32_commit: b3d7ddf5f82922a57fb7d7388c292e7b357add18
+superanimal_topviewmouse_hrnetw32:
+  - mwmathis/DeepLabCutModelZoo-SuperAnimal-TopViewMouse/pose_model.pth
+  - mwmathis/DeepLabCutModelZoo-SuperAnimal-TopViewMouse/detector.pt
 
-superanimal_quadruped_ATP: mwmathis/SuperAnimal_quadruped_ATP_pt/blob/main/AnimalTokenPose_SplitD.pth
-superanimal_quadruped_ATP_commit: 41186b920187e92b897a6483b2a4f053a8ef3700
+superanimal_quadruped_hrnetw32:
+  - mwmathis/DeepLabCutModelZoo-SuperAnimal-Quadruped/pose_model.pth
+  - mwmathis/DeepLabCutModelZoo-SuperAnimal-Quadruped/detector.pt

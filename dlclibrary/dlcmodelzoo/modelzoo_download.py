@@ -8,6 +8,8 @@
 #
 # Licensed under GNU Lesser General Public License v3.0
 #
+from __future__ import annotations
+
 import json
 import os
 
@@ -20,10 +22,10 @@ MODELOPTIONS = [
     "mouse_pupil_vclose",
     "horse_sideview",
     "full_macaque",
-    "superanimal_topviewmouse",
-    "superanimal_quadruped",
-    "superanimal_quadruped_HRNetw32",
-    "superanimal_quadruped_ATP",
+    "superanimal_topviewmouse_dlcrnet",
+    "superanimal_quadruped_dlcrnet",
+    "superanimal_topviewmouse_hrnetw32",
+    "superanimal_quadruped_hrnetw32",
 ]
 
 
@@ -50,7 +52,9 @@ def parse_available_supermodels():
         return json.load(file)
 
 
-def download_huggingface_model(modelname, target_dir=".", remove_hf_folder=True):
+def download_huggingface_model(
+    modelname, target_dir=".", remove_hf_folder=True, rename_mapping: dict | None = None
+):
     """
     Download a DeepLabCut Model Zoo Project from Hugging Face
 
@@ -62,41 +66,58 @@ def download_huggingface_model(modelname, target_dir=".", remove_hf_folder=True)
         Directory where to store the model weights and pose_cfg.yaml file
     remove_hf_folder : bool, default True
         Whether to remove the directory structure provided by HuggingFace after downloading and decompressing data into DeepLabCut format.
+    rename_mapping : dict, default None
+        Dictionary to rename the downloaded file. If None, the original filename is used.
     """
     from huggingface_hub import hf_hub_download
     import tarfile
     from pathlib import Path
+    from ruamel.yaml.comments import CommentedBase
 
     neturls = _load_model_names()
     if modelname not in neturls:
         raise ValueError(f"`modelname` should be one of: {', '.join(modelname)}.")
 
     print("Loading....", modelname)
-    url = neturls[modelname].split("/")
-    repo_id, targzfn = url[0] + "/" + url[1], str(url[-1])
+    urls = neturls[modelname]
+    if isinstance(urls, CommentedBase):
+        urls = list(urls)
+    else:
+        urls = [urls]
 
-    hf_hub_download(repo_id, targzfn, cache_dir=str(target_dir))
+    if not os.path.isabs(target_dir):
+        target_dir = os.path.abspath(target_dir)
 
-    # Create a new subfolder as indicated below, unzipping from there and deleting this folder
-    hf_folder = f"models--{url[0]}--{url[1]}"
-    hf_path = os.path.join(
-        hf_folder,
-        "snapshots",
-        str(neturls[modelname + "_commit"]),
-        targzfn,
-    )
+    for url in urls:
+        url = url.split("/")
+        repo_id, targzfn = url[0] + "/" + url[1], str(url[-1])
 
-    filename = os.path.join(target_dir, hf_path)
-    try:
-        with tarfile.open(filename, mode="r:gz") as tar:
-            for member in tar:
-                if not member.isdir():
-                    fname = Path(member.name).name
-                    tar.makefile(member, os.path.join(target_dir, fname))
-    except tarfile.ReadError:  # The model is a .pt file
-        os.rename(filename, os.path.join(target_dir, targzfn))
+        hf_hub_download(repo_id, targzfn, cache_dir=str(target_dir))
+
+        # Create a new subfolder as indicated below, unzipping from there and deleting this folder
+        hf_folder = f"models--{url[0]}--{url[1]}"
+        path_ = os.path.join(target_dir, hf_folder, "snapshots")
+        commit = os.listdir(path_)[0]
+        filename = os.path.join(path_, commit, targzfn)
+        try:
+            with tarfile.open(filename, mode="r:gz") as tar:
+                for member in tar:
+                    if not member.isdir():
+                        fname = Path(member.name).name
+                        tar.makefile(member, os.path.join(target_dir, fname))
+        except tarfile.ReadError:  # The model is a .pt file
+            if rename_mapping is not None:
+                targzfn = rename_mapping.get(targzfn, targzfn)
+            if os.path.islink(filename):
+                filename_ = os.readlink(filename)
+                if not os.path.isabs(filename_):
+                    filename_ = os.path.abspath(os.path.join(os.path.dirname(filename), filename_))
+                filename = filename_
+            os.rename(filename, os.path.join(target_dir, targzfn))
 
     if remove_hf_folder:
         import shutil
 
         shutil.rmtree(os.path.join(target_dir, hf_folder))
+
+'../../blobs/6c9c66d48f25cac9f8adaea7a485b07f4bd781ba656785bc4e077d9064e8e5df'
