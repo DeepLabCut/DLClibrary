@@ -87,14 +87,9 @@ def download_huggingface_model(modelname, target_dir=".", remove_hf_folder=True)
 
         # Create a new subfolder as indicated below, unzipping from there and deleting this folder
         hf_folder = f"models--{url[0]}--{url[1]}"
-        hf_path = os.path.join(
-            hf_folder,
-            "snapshots",
-            str(neturls[modelname + "_commit"]),
-            targzfn,
-        )
-
-        filename = os.path.join(target_dir, hf_path)
+        path_ = os.path.join(target_dir, hf_folder, 'snapshots')
+        commit = os.listdir(path_)[0]
+        filename = os.path.join(path_, commit, targzfn)
         try:
             with tarfile.open(filename, mode="r:gz") as tar:
                 for member in tar:
