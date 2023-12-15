@@ -109,10 +109,15 @@ def download_huggingface_model(
             if rename_mapping is not None:
                 targzfn = rename_mapping.get(targzfn, targzfn)
             if os.path.islink(filename):
-                filename = os.readlink(filename)
+                filename_ = os.readlink(filename)
+                if not os.path.isabs(filename_):
+                    filename_ = os.path.abspath(os.path.join(os.path.dirname(filename), filename_))
+                filename = filename_
             os.rename(filename, os.path.join(target_dir, targzfn))
 
     if remove_hf_folder:
         import shutil
 
         shutil.rmtree(os.path.join(target_dir, hf_folder))
+
+'../../blobs/6c9c66d48f25cac9f8adaea7a485b07f4bd781ba656785bc4e077d9064e8e5df'
