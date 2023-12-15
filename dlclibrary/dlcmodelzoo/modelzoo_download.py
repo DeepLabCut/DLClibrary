@@ -8,6 +8,8 @@
 #
 # Licensed under GNU Lesser General Public License v3.0
 #
+from __future__ import annotations
+
 import json
 import os
 
@@ -50,7 +52,9 @@ def parse_available_supermodels():
         return json.load(file)
 
 
-def download_huggingface_model(modelname, target_dir=".", remove_hf_folder=True):
+def download_huggingface_model(
+    modelname, target_dir=".", remove_hf_folder=True, rename_mapping: dict | None = None
+):
     """
     Download a DeepLabCut Model Zoo Project from Hugging Face
 
@@ -62,6 +66,8 @@ def download_huggingface_model(modelname, target_dir=".", remove_hf_folder=True)
         Directory where to store the model weights and pose_cfg.yaml file
     remove_hf_folder : bool, default True
         Whether to remove the directory structure provided by HuggingFace after downloading and decompressing data into DeepLabCut format.
+    rename_mapping : dict, default None
+        Dictionary to rename the downloaded file. If None, the original filename is used.
     """
     from huggingface_hub import hf_hub_download
     import tarfile
@@ -87,7 +93,7 @@ def download_huggingface_model(modelname, target_dir=".", remove_hf_folder=True)
 
         # Create a new subfolder as indicated below, unzipping from there and deleting this folder
         hf_folder = f"models--{url[0]}--{url[1]}"
-        path_ = os.path.join(target_dir, hf_folder, 'snapshots')
+        path_ = os.path.join(target_dir, hf_folder, "snapshots")
         commit = os.listdir(path_)[0]
         filename = os.path.join(path_, commit, targzfn)
         try:
@@ -97,6 +103,8 @@ def download_huggingface_model(modelname, target_dir=".", remove_hf_folder=True)
                         fname = Path(member.name).name
                         tar.makefile(member, os.path.join(target_dir, fname))
         except tarfile.ReadError:  # The model is a .pt file
+            if rename_mapping is not None:
+                targzfn = rename_mapping.get(targzfn, targzfn)
             os.rename(filename, os.path.join(target_dir, targzfn))
 
     if remove_hf_folder:
