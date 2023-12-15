@@ -105,6 +105,8 @@ def download_huggingface_model(
         except tarfile.ReadError:  # The model is a .pt file
             if rename_mapping is not None:
                 targzfn = rename_mapping.get(targzfn, targzfn)
+            if os.path.islink(filename):
+                filename = os.readlink(filename)
             os.rename(filename, os.path.join(target_dir, targzfn))
 
     if remove_hf_folder:
