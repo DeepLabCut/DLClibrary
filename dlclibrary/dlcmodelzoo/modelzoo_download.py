@@ -31,6 +31,8 @@ MODELOPTIONS = [
     "superanimal_quadruped_dlcrnet",
     "superanimal_topviewmouse_hrnetw32",
     "superanimal_quadruped_hrnetw32",
+    "superanimal_topviewmouse",  # DeepLabCut 2.X backwards compatibility
+    "superanimal_quadruped",  # DeepLabCut 2.X backwards compatibility
 ]
 
 
