@@ -27,8 +27,9 @@ MODELOPTIONS = [
     "mouse_pupil_vclose",
     "horse_sideview",
     "full_macaque",
-    "superanimal_topviewmouse",
+    "superanimal_bird",
     "superanimal_quadruped",
+    "superanimal_topviewmouse",
 ]
 
 

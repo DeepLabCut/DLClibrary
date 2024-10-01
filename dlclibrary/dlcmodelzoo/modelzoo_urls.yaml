@@ -37,6 +37,8 @@ superanimal_quadruped_hrnetw32:
   - mwmathis/DeepLabCutModelZoo-SuperAnimal-Quadruped/detector.pt
 
 # Updated format - split detectors and pose models
+superanimal_bird_resnet_50: DeepLabCut/DeepLabCutModelZoo-SuperAnimal-Bird/superanimal_bird_resnet_50.pt
+superanimal_bird_ssdlite: DeepLabCut/DeepLabCutModelZoo-SuperAnimal-Bird/superanimal_bird_ssdlite.pt
 superanimal_topviewmouse_hrnet_w32: mwmathis/DeepLabCutModelZoo-SuperAnimal-TopViewMouse/pose_model.pth
 superanimal_topviewmouse_fasterrcnn_resnet50_fpn_v2: mwmathis/DeepLabCutModelZoo-SuperAnimal-TopViewMouse/detector.pt
 superanimal_quadruped_hrnet_w32: mwmathis/DeepLabCutModelZoo-SuperAnimal-Quadruped/pose_model.pth
