@@ -1,0 +1,19 @@
+# DeepLabCut 3.0: SuperAnimal detectors and pose model URLS
+
+superanimal_bird:
+  detectors:
+    ssdlite: DeepLabCut/DeepLabCutModelZoo-SuperAnimal-Bird/superanimal_bird_ssdlite.pt
+  pose_models:
+    resnet_50: DeepLabCut/DeepLabCutModelZoo-SuperAnimal-Bird/superanimal_bird_resnet_50.pt
+
+superanimal_topviewmouse:
+  detectors:
+    fasterrcnn_resnet50_fpn_v2: mwmathis/DeepLabCutModelZoo-SuperAnimal-TopViewMouse/detector.pt
+  pose_models:
+    hrnet_w32: mwmathis/DeepLabCutModelZoo-SuperAnimal-TopViewMouse/pose_model.pth
+
+superanimal_quadruped:
+  detectors:
+    fasterrcnn_resnet50_fpn_v2: mwmathis/DeepLabCutModelZoo-SuperAnimal-Quadruped/detector.pt
+  pose_models:
+    hrnet_w32: mwmathis/DeepLabCutModelZoo-SuperAnimal-Quadruped/pose_model.pth

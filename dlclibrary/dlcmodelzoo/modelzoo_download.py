@@ -16,6 +16,7 @@ import tarfile
 from pathlib import Path
 
 from huggingface_hub import hf_hub_download
+from ruamel.yaml import YAML
 from ruamel.yaml.comments import CommentedBase
 
 # just expand this list when adding new models:
@@ -40,20 +41,64 @@ def _get_dlclibrary_path():
     return os.path.split(importlib.util.find_spec("dlclibrary").origin)[0]
 
 
+def _load_pytorch_models() -> dict[str, dict[str, dict[str, str]]]:
+    """Load URLs and commit hashes for available models."""
+    urls = Path(_get_dlclibrary_path()) / "dlcmodelzoo" / "modelzoo_urls_pytorch.yaml"
+    with open(urls) as file:
+        data = YAML(pure=True).load(file)
+
+    return data
+
+
+def _load_pytorch_dataset_models(dataset: str) -> dict[str, dict[str, str]]:
+    """Load URLs and commit hashes for available models."""
+    models = _load_pytorch_models()
+    if not dataset in models:
+        raise ValueError(
+            f"Could not find any models for {dataset}. Models are available for "
+            f"{list(models.keys())}"
+        )
+
+    return models[dataset]
+
+
 def _load_model_names():
     """Load URLs and commit hashes for available models."""
-    from ruamel.yaml import YAML
-
     fn = os.path.join(_get_dlclibrary_path(), "dlcmodelzoo", "modelzoo_urls.yaml")
     with open(fn) as file:
-        return YAML().load(file)
+        model_names = YAML().load(file)
+
+    # add PyTorch models
+    for dataset, model_types in _load_pytorch_models().items():
+        for model_type, models in model_types.items():
+            for model, url in models.items():
+                model_names[f"{dataset}_{model}"] = url
+
+    return model_names
 
 
 def parse_available_supermodels():
     libpath = _get_dlclibrary_path()
     json_path = os.path.join(libpath, "dlcmodelzoo", "superanimal_models.json")
     with open(json_path) as file:
-        return json.load(file)
+        super_animal_models = json.load(file)
+    return super_animal_models
+
+
+def get_available_detectors(dataset: str) -> list[str]:
+    """
+    Returns:
+        The detectors available for the dataset.
+    """
+    return list(_load_pytorch_dataset_models(dataset)["detectors"].keys())
+
+
+def get_available_models(dataset: str) -> list[str]:
+    """
+    Returns:
+        The pose models available for the dataset.
+    """
+    return list(_load_pytorch_dataset_models(dataset)["pose_models"].keys())
 
 
 def _handle_downloaded_file(

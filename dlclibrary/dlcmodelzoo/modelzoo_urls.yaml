@@ -36,14 +36,6 @@ superanimal_quadruped_hrnetw32:
   - mwmathis/DeepLabCutModelZoo-SuperAnimal-Quadruped/pose_model.pth
   - mwmathis/DeepLabCutModelZoo-SuperAnimal-Quadruped/detector.pt
 
-# Updated format - split detectors and pose models
-superanimal_bird_resnet_50: DeepLabCut/DeepLabCutModelZoo-SuperAnimal-Bird/superanimal_bird_resnet_50.pt
-superanimal_bird_ssdlite: DeepLabCut/DeepLabCutModelZoo-SuperAnimal-Bird/superanimal_bird_ssdlite.pt
-superanimal_topviewmouse_hrnet_w32: mwmathis/DeepLabCutModelZoo-SuperAnimal-TopViewMouse/pose_model.pth
-superanimal_topviewmouse_fasterrcnn_resnet50_fpn_v2: mwmathis/DeepLabCutModelZoo-SuperAnimal-TopViewMouse/detector.pt
-superanimal_quadruped_hrnet_w32: mwmathis/DeepLabCutModelZoo-SuperAnimal-Quadruped/pose_model.pth
-superanimal_quadruped_fasterrcnn_resnet50_fpn_v2: mwmathis/DeepLabCutModelZoo-SuperAnimal-Quadruped/detector.pt
-
 # DeepLabCut 2.X backwards compatibility
 superanimal_topviewmouse: mwmathis/DeepLabCutModelZoo-SuperAnimal-TopViewMouse/DLC_ma_supertopview5k_resnet_50_iteration-0_shuffle-1.tar.gz
 

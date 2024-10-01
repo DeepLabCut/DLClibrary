@@ -32,6 +32,7 @@ setuptools.setup(
             "dlclibrary",
             [
                 "dlclibrary/dlcmodelzoo/modelzoo_urls.yaml",
+                "dlclibrary/dlcmodelzoo/modelzoo_urls_pytorch.yaml",
                 "dlclibrary/dlcmodelzoo/superanimal_models.json",
                 "dlclibrary/dlcmodelzoo/superanimal_configs/superquadruped.yaml",
                 "dlclibrary/dlcmodelzoo/superanimal_configs/supertopview.yaml",
