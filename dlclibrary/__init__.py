@@ -11,6 +11,8 @@
 
 from dlclibrary.dlcmodelzoo.modelzoo_download import (
     download_huggingface_model,
+    get_available_detectors,
+    get_available_models,
     parse_available_supermodels,
 )
 from dlclibrary.version import __version__, VERSION

@@ -86,7 +86,8 @@ def parse_available_supermodels():
 
 
 def get_available_detectors(dataset: str) -> list[str]:
-    """
+    """ Only for PyTorch models.
+
     Returns:
         The detectors available for the dataset.
     """
@@ -94,7 +95,8 @@ def get_available_detectors(dataset: str) -> list[str]:
 
 
 def get_available_models(dataset: str) -> list[str]:
-    """
+    """ Only for PyTorch models.
+
     Returns:
         The pose models available for the dataset.
     """
