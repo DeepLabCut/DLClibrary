@@ -27,16 +27,8 @@ MODELOPTIONS = [
     "mouse_pupil_vclose",
     "horse_sideview",
     "full_macaque",
-    "superanimal_topviewmouse_dlcrnet",
-    "superanimal_quadruped_dlcrnet",
-    "superanimal_topviewmouse_fasterrcnn_resnet50_fpn_v2",
-    "superanimal_topviewmouse_hrnet_w32",
-    "superanimal_topviewmouse_hrnetw32",
-    "superanimal_quadruped_fasterrcnn_resnet50_fpn_v2",
-    "superanimal_quadruped_hrnet_w32",
-    "superanimal_quadruped_hrnetw32",
-    "superanimal_topviewmouse",  # DeepLabCut 2.X backwards compatibility
-    "superanimal_quadruped",  # DeepLabCut 2.X backwards compatibility
+    "superanimal_topviewmouse",
+    "superanimal_quadruped",
 ]
 
 
