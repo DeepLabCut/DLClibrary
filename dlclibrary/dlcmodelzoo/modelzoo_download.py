@@ -147,7 +147,9 @@ def download_huggingface_model(
     """
     net_urls = _load_model_names()
     if model_name not in net_urls:
-        raise ValueError(f"`modelname` should be one of: {', '.join(net_urls)}.")
+        raise ValueError(
+            f"`modelname={model_name}` should be one of: {', '.join(net_urls)}."
+        )
 
     print("Loading....", model_name)
     urls = net_urls[model_name]
