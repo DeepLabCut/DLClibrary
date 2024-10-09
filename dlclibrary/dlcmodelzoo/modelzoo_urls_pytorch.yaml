@@ -2,6 +2,7 @@
 
 superanimal_bird:
   detectors:
+    fasterrcnn_mobilenet_v3_large_fpn: DeepLabCut/DeepLabCutModelZoo-SuperAnimal-Bird/superanimal_bird_fasterrcnn_mobilenet_v3_large_fpn.pt
     ssdlite: DeepLabCut/DeepLabCutModelZoo-SuperAnimal-Bird/superanimal_bird_ssdlite.pt
   pose_models:
     resnet_50: DeepLabCut/DeepLabCutModelZoo-SuperAnimal-Bird/superanimal_bird_resnet_50.pt
