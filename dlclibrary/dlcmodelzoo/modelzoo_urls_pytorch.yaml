@@ -9,12 +9,16 @@ superanimal_bird:
 
 superanimal_topviewmouse:
   detectors:
-    fasterrcnn_resnet50_fpn_v2: mwmathis/DeepLabCutModelZoo-SuperAnimal-TopViewMouse/detector.pt
+    fasterrcnn_mobilenet_v3_large_fpn: mwmathis/DeepLabCutModelZoo-SuperAnimal-TopViewMouse/superanimal_topviewmouse_fasterrcnn_mobilenet_v3_large_fpn.pt
+    fasterrcnn_resnet50_fpn_v2: mwmathis/DeepLabCutModelZoo-SuperAnimal-TopViewMouse/superanimal_topviewmouse_fasterrcnn_resnet50_fpn_v2.pt
   pose_models:
-    hrnet_w32: mwmathis/DeepLabCutModelZoo-SuperAnimal-TopViewMouse/pose_model.pth
+    hrnet_w32: mwmathis/DeepLabCutModelZoo-SuperAnimal-TopViewMouse/superanimal_topviewmouse_hrnet_w32.pt
+    resnet_50: mwmathis/DeepLabCutModelZoo-SuperAnimal-TopViewMouse/superanimal_topviewmouse_resnet_50.pt
 
 superanimal_quadruped:
   detectors:
-    fasterrcnn_resnet50_fpn_v2: mwmathis/DeepLabCutModelZoo-SuperAnimal-Quadruped/detector.pt
+    fasterrcnn_mobilenet_v3_large_fpn: mwmathis/DeepLabCutModelZoo-SuperAnimal-Quadruped/superanimal_quadruped_fasterrcnn_mobilenet_v3_large_fpn.pt
+    fasterrcnn_resnet50_fpn_v2: mwmathis/DeepLabCutModelZoo-SuperAnimal-Quadruped/superanimal_quadruped_fasterrcnn_resnet50_fpn_v2.pt
   pose_models:
-    hrnet_w32: mwmathis/DeepLabCutModelZoo-SuperAnimal-Quadruped/pose_model.pth
+    hrnet_w32: mwmathis/DeepLabCutModelZoo-SuperAnimal-Quadruped/superanimal_quadruped_hrnet_w32.pt
+    resnet_50: mwmathis/DeepLabCutModelZoo-SuperAnimal-Quadruped/superanimal_quadruped_resnet_50.pt
