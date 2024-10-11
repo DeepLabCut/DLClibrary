@@ -37,9 +37,7 @@ download_huggingface_model("superanimal_quadruped", model_dir)
 
 PyTorch models available for a given dataset (compatible with DeepLabCut>=3.0) can be 
 listed using the `dlclibrary.get_available_detectors` and
-`dlclibrary.get_available_models` methods.
-
-Example use:
+`dlclibrary.get_available_models` methods. Example use:
 
 ```python
 >>> import dlclibrary
