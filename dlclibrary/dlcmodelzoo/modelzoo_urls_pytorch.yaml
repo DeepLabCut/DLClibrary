@@ -1,0 +1,24 @@
+# DeepLabCut 3.0: SuperAnimal detectors and pose model URLS
+
+superanimal_bird:
+  detectors:
+    fasterrcnn_mobilenet_v3_large_fpn: DeepLabCut/DeepLabCutModelZoo-SuperAnimal-Bird/superanimal_bird_fasterrcnn_mobilenet_v3_large_fpn.pt
+    ssdlite: DeepLabCut/DeepLabCutModelZoo-SuperAnimal-Bird/superanimal_bird_ssdlite.pt
+  pose_models:
+    resnet_50: DeepLabCut/DeepLabCutModelZoo-SuperAnimal-Bird/superanimal_bird_resnet_50.pt
+
+superanimal_topviewmouse:
+  detectors:
+    fasterrcnn_mobilenet_v3_large_fpn: mwmathis/DeepLabCutModelZoo-SuperAnimal-TopViewMouse/superanimal_topviewmouse_fasterrcnn_mobilenet_v3_large_fpn.pt
+    fasterrcnn_resnet50_fpn_v2: mwmathis/DeepLabCutModelZoo-SuperAnimal-TopViewMouse/superanimal_topviewmouse_fasterrcnn_resnet50_fpn_v2.pt
+  pose_models:
+    hrnet_w32: mwmathis/DeepLabCutModelZoo-SuperAnimal-TopViewMouse/superanimal_topviewmouse_hrnet_w32.pt
+    resnet_50: mwmathis/DeepLabCutModelZoo-SuperAnimal-TopViewMouse/superanimal_topviewmouse_resnet_50.pt
+
+superanimal_quadruped:
+  detectors:
+    fasterrcnn_mobilenet_v3_large_fpn: mwmathis/DeepLabCutModelZoo-SuperAnimal-Quadruped/superanimal_quadruped_fasterrcnn_mobilenet_v3_large_fpn.pt
+    fasterrcnn_resnet50_fpn_v2: mwmathis/DeepLabCutModelZoo-SuperAnimal-Quadruped/superanimal_quadruped_fasterrcnn_resnet50_fpn_v2.pt
+  pose_models:
+    hrnet_w32: mwmathis/DeepLabCutModelZoo-SuperAnimal-Quadruped/superanimal_quadruped_hrnet_w32.pt
+    resnet_50: mwmathis/DeepLabCutModelZoo-SuperAnimal-Quadruped/superanimal_quadruped_resnet_50.pt

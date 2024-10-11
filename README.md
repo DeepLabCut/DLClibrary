@@ -35,6 +35,20 @@ model_dir.mkdir()
 download_huggingface_model("superanimal_quadruped", model_dir)
 ```
 
+PyTorch models available for a given dataset (compatible with DeepLabCut>=3.0) can be 
+listed using the `dlclibrary.get_available_detectors` and
+`dlclibrary.get_available_models` methods. Example use:
+
+```python
+>>> import dlclibrary
+>>> dlclibrary.get_available_detectors("superanimal_bird")
+['fasterrcnn_mobilenet_v3_large_fpn', 'ssdlite']
+
+>>> dlclibrary.get_available_models("superanimal_bird")
+['resnet_50']
+```
+
+
 ## How to add a new model?
 
 Pick a good model_name. Follow the (novel) naming convention (modeltype_species), e.g. ```superanimal_topviewmouse```.  
