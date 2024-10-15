@@ -84,6 +84,15 @@ def parse_available_supermodels():
     return super_animal_models
 
 
+def get_available_datasets() -> list[str]:
+    """Only for PyTorch models.
+
+    Returns:
+        The name of datasets for which models are available
+    """
+    return list(_load_pytorch_models().keys())
+
+
 def get_available_detectors(dataset: str) -> list[str]:
     """ Only for PyTorch models.
 

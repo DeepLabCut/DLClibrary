@@ -36,11 +36,15 @@ download_huggingface_model("superanimal_quadruped", model_dir)
 ```
 
 PyTorch models available for a given dataset (compatible with DeepLabCut>=3.0) can be 
-listed using the `dlclibrary.get_available_detectors` and
-`dlclibrary.get_available_models` methods. Example use:
+listed using the `dlclibrary.get_available_detectors` and 
+`dlclibrary.get_available_models` methods. The datasets for which models are available
+can be listed using `dlclibrary.get_available_datasets`. Example use:
 
 ```python
 >>> import dlclibrary
+>>> dlclibrary.get_available_datasets()
+['superanimal_bird', 'superanimal_topviewmouse', 'superanimal_quadruped']
+
 >>> dlclibrary.get_available_detectors("superanimal_bird")
 ['fasterrcnn_mobilenet_v3_large_fpn', 'ssdlite']
 
@@ -87,4 +91,5 @@ To add a new model for `deeplabcut >= 3.0.0`, simply:
 - add the structure if the model was trained on a new dataset 
 
 The models will then be listed when calling `dlclibrary.get_available_detectors` or
-`dlclibrary.get_available_models`!
+`dlclibrary.get_available_models`! You can list the datasets for which models are 
+available using `dlclibrary.get_available_datasets`.
