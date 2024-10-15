@@ -28,7 +28,6 @@ MODELOPTIONS = [
     "mouse_pupil_vclose",
     "horse_sideview",
     "full_macaque",
-    "superanimal_bird",
     "superanimal_quadruped",
     "superanimal_topviewmouse",
 ]
@@ -83,6 +82,15 @@ def parse_available_supermodels():
     with open(json_path) as file:
         super_animal_models = json.load(file)
     return super_animal_models
+
+
+def get_available_datasets() -> list[str]:
+    """Only for PyTorch models.
+
+    Returns:
+        The name of datasets for which models are available
+    """
+    return list(_load_pytorch_models().keys())
 
 
 def get_available_detectors(dataset: str) -> list[str]:
