@@ -15,7 +15,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="dlclibrary",
-    version="0.0.6",
+    version="0.0.7",
     author="A. & M. Mathis Labs",
     author_email="alexander@deeplabcut.org",
     description="Lightweight library supporting universal functions for the DeepLabCut ecosystem",
