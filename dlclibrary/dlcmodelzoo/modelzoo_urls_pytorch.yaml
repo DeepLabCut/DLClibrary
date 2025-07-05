@@ -25,6 +25,6 @@ superanimal_quadruped:
     resnet_50: mwmathis/DeepLabCutModelZoo-SuperAnimal-Quadruped/superanimal_quadruped_resnet_50.pt
     rtmpose_s: mwmathis/DeepLabCutModelZoo-SuperAnimal-Quadruped/superanimal_quadruped_rtmpose_s.pt
 
-superanimal_humanbody_rtmposex:
+superanimal_humanbody:
   pose_models:
     rtmpose_x: DeepLabCut/HumanBody/rtmpose-x_simcc-body7.pt
