@@ -21,6 +21,7 @@ import dlclibrary.dlcmodelzoo.modelzoo_download as modelzoo
         ("superanimal_bird", ["ssdlite"]),
         ("superanimal_topviewmouse", ["fasterrcnn_resnet50_fpn_v2"]),
         ("superanimal_quadruped", ["fasterrcnn_resnet50_fpn_v2"]),
+        ("superanimal_humanbody", ["rtmpose_x"]),
     ]
 )
 def test_get_super_animal_detectors(data: tuple[str, list[str]]):

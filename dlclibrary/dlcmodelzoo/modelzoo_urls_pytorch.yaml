@@ -24,3 +24,7 @@ superanimal_quadruped:
     hrnet_w32: mwmathis/DeepLabCutModelZoo-SuperAnimal-Quadruped/superanimal_quadruped_hrnet_w32.pt
     resnet_50: mwmathis/DeepLabCutModelZoo-SuperAnimal-Quadruped/superanimal_quadruped_resnet_50.pt
     rtmpose_s: mwmathis/DeepLabCutModelZoo-SuperAnimal-Quadruped/superanimal_quadruped_rtmpose_s.pt
+
+superanimal_humanbody:
+  pose_models:
+    rtmpose_x: DeepLabCut/HumanBody/rtmpose-x_simcc-body7.pt
