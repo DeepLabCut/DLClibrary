@@ -41,7 +41,7 @@ jobs:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.TWINE_API_KEY }}
         run: |
-          make dist
+          python3 setup.py sdist bdist_wheel
           ls dist/
           tar tvf dist/dlclibrary-*.tar.gz
           python3 -m twine upload dist/*
