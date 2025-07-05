@@ -1,0 +1,47 @@
+name: Update release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  pull_request:
+    branches:
+      - main
+    types:
+      - labeled
+      - opened
+      - edited
+      - synchronize
+      - reopened
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Cache dependencies
+        id: pip-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install wheel
+          pip install "packaging>=24.2"
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build and publish to PyPI
+        if: ${{ github.event_name == 'push' }}
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.TWINE_API_KEY }}
+        run: |
+          make dist
+          ls dist/
+          tar tvf dist/dlclibrary-*.tar.gz
+          python3 -m twine upload dist/*
