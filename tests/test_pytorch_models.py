@@ -23,8 +23,8 @@ import dlclibrary.dlcmodelzoo.modelzoo_download as modelzoo
         ("superanimal_quadruped", ["fasterrcnn_resnet50_fpn_v2"]),
     ]
 )
-def test_get_super_animal_detectors(data: tuple[str, list[str]]):
-    dataset, expected_detectors = data
+def test_get_super_animal_detectors(detector_data: tuple[str, list[str]]):
+    dataset, expected_detectors = detector_data
     detectors = modelzoo.get_available_detectors(dataset)
     assert len(detectors) >= len(expected_detectors)
     for det in expected_detectors:
@@ -40,9 +40,9 @@ def test_get_super_animal_detectors(data: tuple[str, list[str]]):
         ("superanimal_humanbody", ["rtmpose_x"]),
     ]
 )
-def test_get_super_animal_pose_models(data: tuple[str, list[str]]):
-    dataset, expected_pose_models = data
+def test_get_super_animal_pose_models(posemodel_data: tuple[str, list[str]]):
+    dataset, expected_pose_models = posemodel_data
     pose_models = modelzoo.get_available_models(dataset)
     assert len(pose_models) >= len(expected_pose_models)
     for pose_model in expected_pose_models:
-        assert pose_model in pose_models
+        assert pose_model in pose_models	
