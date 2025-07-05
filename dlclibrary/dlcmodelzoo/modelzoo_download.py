@@ -30,7 +30,6 @@ MODELOPTIONS = [
     "full_macaque",
     "superanimal_quadruped",
     "superanimal_topviewmouse",
-    "superanimal_humanbody_rtmposex",
 ]
 
 
