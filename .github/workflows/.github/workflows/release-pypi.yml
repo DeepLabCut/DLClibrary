@@ -43,7 +43,7 @@ jobs:
         run: |
           make dist
           ls dist/
-          tar tvf dist/cebra-*.tar.gz
+          tar tvf dist/dlclibrary-*.tar.gz
           python3 -m twine upload --repository testpypi dist/*
 
       - name: Build and publish to PyPI
