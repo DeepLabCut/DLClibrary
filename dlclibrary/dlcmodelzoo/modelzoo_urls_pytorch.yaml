@@ -27,4 +27,4 @@ superanimal_quadruped:
 
 superanimal_humanbody_rtmposex:
   pose_models:
-    rtmpose_x: DeepLabCut/HumanBody/blob/main/rtmpose-x_simcc-body7.pt
+    rtmpose_x: DeepLabCut/HumanBody/rtmpose-x_simcc-body7.pt
