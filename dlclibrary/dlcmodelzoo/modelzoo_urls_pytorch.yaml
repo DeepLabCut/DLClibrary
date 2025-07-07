@@ -26,6 +26,6 @@ superanimal_quadruped:
     rtmpose_s: mwmathis/DeepLabCutModelZoo-SuperAnimal-Quadruped/superanimal_quadruped_rtmpose_s.pt
 
 superanimal_humanbody:
-  detectors: None
+  detectors: null
   pose_models:
     rtmpose_x: DeepLabCut/HumanBody/rtmpose-x_simcc-body7.pt
