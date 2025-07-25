@@ -139,7 +139,7 @@ def download_huggingface_model(
     model_name: str,
     target_dir: str = ".",
     remove_hf_folder: bool = True,
-    rename_mapping: dict | None = None,
+    rename_mapping: str | dict | None = None,
 ):
     """
     Downloads a DeepLabCut Model Zoo Project from Hugging Face.
@@ -180,6 +180,10 @@ def download_huggingface_model(
         path_ = os.path.join(target_dir, hf_folder, "snapshots")
         commit = os.listdir(path_)[0]
         file_name = os.path.join(path_, commit, targzfn)
+
+        if isinstance(rename_mapping, str):
+            rename_mapping = {targzfn: rename_mapping}
+
         _handle_downloaded_file(file_name, target_dir, rename_mapping)
 
     if remove_hf_folder:
