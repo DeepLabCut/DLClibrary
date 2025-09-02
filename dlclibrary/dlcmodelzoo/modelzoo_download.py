@@ -94,7 +94,7 @@ def get_available_datasets() -> list[str]:
 
 
 def get_available_detectors(dataset: str) -> list[str]:
-    """ Only for PyTorch models.
+    """Only for PyTorch models.
 
     Returns:
         The detectors available for the dataset.
@@ -103,7 +103,7 @@ def get_available_detectors(dataset: str) -> list[str]:
 
 
 def get_available_models(dataset: str) -> list[str]:
-    """ Only for PyTorch models.
+    """Only for PyTorch models.
 
     Returns:
         The pose models available for the dataset.
@@ -167,7 +167,11 @@ def download_huggingface_model(
         download_huggingface_model("superanimal_bird_resnet_50", remove_hf_folder=False)
 
         >>> # Download and rename by specifying the new name directly
-        download_huggingface_model("superanimal_humanbody_rtmpose_x", target_dir="/path/to/,y/checkpoints", rename_mapping="superanimal_humanbody_rtmpose_x.pt")
+        download_huggingface_model(
+            model_name="superanimal_humanbody_rtmpose_x",
+            target_dir="/path/to/,y/checkpoints",
+            rename_mapping="superanimal_humanbody_rtmpose_x.pt"
+        )
     """
     net_urls = _load_model_names()
     if model_name not in net_urls:
