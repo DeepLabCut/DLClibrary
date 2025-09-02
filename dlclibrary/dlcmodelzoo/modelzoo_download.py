@@ -145,13 +145,29 @@ def download_huggingface_model(
     Downloads a DeepLabCut Model Zoo Project from Hugging Face.
 
     Args:
-        model_name (str): Name of the ModelZoo model.
+        model_name (str):
+            Name of the ModelZoo model.
             For visualizations, see http://www.mackenziemathislab.org/dlc-modelzoo.
-        target_dir (str): Directory where the model weights and pose_cfg.yaml file will be stored.
-        remove_hf_folder (bool, optional): Whether to remove the directory structure provided by HuggingFace
-            after downloading and decompressing the data into DeepLabCut format. Defaults to True.
-        rename_mapping (dict, optional): A dictionary to rename the downloaded file.
-            If None, the original filename is used. Defaults to None.
+        target_dir (str, optional):
+            Target directory where the model weights will be stored.
+            Defaults to the current directory.
+        remove_hf_folder (bool, optional):
+            Whether to remove the directory structure created by HuggingFace
+            after downloading and decompressing the data into DeepLabCut format.
+            Defaults to True.
+        rename_mapping (dict | str | None, optional):
+            - If a dictionary, it should map the original Hugging Face filenames
+              to new filenames (e.g. {"snapshot-12345.tar.gz": "mymodel.tar.gz"}).
+            - If a string, it is interpreted as the new name for the downloaded file
+            - If None, the original filename is used.
+            Defaults to None.
+
+    Examples:
+        >>> # Download without renaming, keep original filename
+        download_huggingface_model("superanimal_bird_resnet_50", remove_hf_folder=False)
+
+        >>> # Download and rename by specifying the new name directly
+        download_huggingface_model("superanimal_humanbody_rtmpose_x", target_dir="/path/to/,y/checkpoints", rename_mapping="superanimal_humanbody_rtmpose_x.pt")
     """
     net_urls = _load_model_names()
     if model_name not in net_urls:
