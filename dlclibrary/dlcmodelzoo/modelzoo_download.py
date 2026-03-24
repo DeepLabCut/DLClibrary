@@ -132,7 +132,9 @@ def _handle_downloaded_file(
                     os.path.join(os.path.dirname(file_path), file_path_)
                 )
             file_path = file_path_
-        os.rename(file_path, os.path.join(target_dir, file_name))
+        import shutil
+        shutil.copy2(file_path, os.path.join(target_dir, file_name))
+
 
 
 def download_huggingface_model(
@@ -189,24 +191,26 @@ def download_huggingface_model(
     if not os.path.isabs(target_dir):
         target_dir = os.path.abspath(target_dir)
 
+    os.makedirs(target_dir, exist_ok=True)
+
+    last_hf_folder = None
+
     for url in urls:
         url = url.split("/")
         repo_id, targzfn = url[0] + "/" + url[1], str(url[-1])
 
-        hf_hub_download(repo_id, targzfn, cache_dir=str(target_dir))
-
-        # Create a new subfolder as indicated below, unzipping from there and deleting this folder
-        hf_folder = f"models--{url[0]}--{url[1]}"
-        path_ = os.path.join(target_dir, hf_folder, "snapshots")
-        commit = os.listdir(path_)[0]
-        file_name = os.path.join(path_, commit, targzfn)
+        downloaded = hf_hub_download(repo_id, targzfn, cache_dir=str(target_dir))
 
         if isinstance(rename_mapping, str):
-            rename_mapping = {targzfn: rename_mapping}
+            mapping = {targzfn: rename_mapping}
+        else:
+            mapping = rename_mapping
 
-        _handle_downloaded_file(file_name, target_dir, rename_mapping)
+        _handle_downloaded_file(downloaded, target_dir, mapping)
 
-    if remove_hf_folder:
+        last_hf_folder = f"models--{url[0]}--{url[1]}"
+
+    if remove_hf_folder and last_hf_folder is not None:
         import shutil
+        shutil.rmtree(os.path.join(target_dir, last_hf_folder), ignore_errors=True)
 
-        shutil.rmtree(os.path.join(target_dir, hf_folder))
