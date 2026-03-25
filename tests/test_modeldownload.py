@@ -169,22 +169,3 @@ def test_download_with_rename_mapping_for_pt(tmp_path, mock_modelzoo):
     files = {p.name for p in folder.iterdir()}
     assert "renamed_weights.pt" in files
     assert not any(name.startswith("models--") for name in files)
-
-
-def test_remove_hf_folder_flag_no_longer_affects_target_dir(tmp_path, mock_modelzoo):
-    folder = tmp_path / "keep_cache"
-    folder.mkdir()
-
-    dlclibrary.download_huggingface_model(
-        "full_cat",
-        str(folder),
-        remove_hf_folder=False,
-    )
-
-    files = {p.name for p in folder.iterdir()}
-
-    # Final artifact should still be there
-    assert "full_cat.pt" in files
-
-    # HF cache should no longer be created inside target_dir
-    assert not any(name.startswith("models--") for name in files)

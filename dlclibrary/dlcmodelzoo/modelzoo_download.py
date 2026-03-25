@@ -123,7 +123,7 @@ def _handle_downloaded_file(
     try:
         with tarfile.open(file_path, mode="r:gz") as tar:
             for member in tar:
-                if not member.isdir():
+                if not member.isfile():
                     fname = Path(member.name).name
                     extracted_path = os.path.join(target_dir, fname)
                     with tar.extractfile(member) as src, open(extracted_path, "wb") as dst:
@@ -137,7 +137,6 @@ def _handle_downloaded_file(
 def download_huggingface_model(
     model_name: str,
     target_dir: str = ".",
-    remove_hf_folder: bool = True,
     rename_mapping: str | dict | None = None,
 ):
     """
@@ -150,10 +149,6 @@ def download_huggingface_model(
         target_dir (str, optional):
             Target directory where the model weights will be stored.
             Defaults to the current directory.
-        remove_hf_folder (bool, optional):
-            Whether to remove the directory structure created by HuggingFace
-            after downloading and decompressing the data into DeepLabCut format.
-            Defaults to True.
         rename_mapping (dict | str | None, optional):
             - If a dictionary, it should map the original Hugging Face filenames
               to new filenames (e.g. {"snapshot-12345.tar.gz": "mymodel.tar.gz"}).
