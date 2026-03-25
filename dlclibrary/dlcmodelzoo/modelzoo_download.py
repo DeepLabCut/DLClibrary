@@ -13,6 +13,8 @@ from __future__ import annotations
 import json
 import os
 import tarfile
+import shutil
+import tempfile
 from pathlib import Path
 
 from huggingface_hub import hf_hub_download
@@ -111,30 +113,25 @@ def get_available_models(dataset: str) -> list[str]:
     return list(_load_pytorch_dataset_models(dataset)["pose_models"].keys())
 
 
+
 def _handle_downloaded_file(
     file_path: str, target_dir: str, rename_mapping: dict | None = None
 ):
-    """Handle the downloaded file from HuggingFace"""
+    """Handle the downloaded file from HuggingFace cache and place the final artifact in target_dir."""
     file_name = os.path.basename(file_path)
+
     try:
         with tarfile.open(file_path, mode="r:gz") as tar:
             for member in tar:
                 if not member.isdir():
                     fname = Path(member.name).name
-                    tar.makefile(member, os.path.join(target_dir, fname))
-    except tarfile.ReadError:  # The model is a .pt file
+                    extracted_path = os.path.join(target_dir, fname)
+                    with tar.extractfile(member) as src, open(extracted_path, "wb") as dst:
+                        shutil.copyfileobj(src, dst)
+    except tarfile.ReadError:
         if rename_mapping is not None:
             file_name = rename_mapping.get(file_name, file_name)
-        if os.path.islink(file_path):
-            file_path_ = os.readlink(file_path)
-            if not os.path.isabs(file_path_):
-                file_path_ = os.path.abspath(
-                    os.path.join(os.path.dirname(file_path), file_path_)
-                )
-            file_path = file_path_
-        import shutil
         shutil.copy2(file_path, os.path.join(target_dir, file_name))
-
 
 
 def download_huggingface_model(
@@ -190,27 +187,22 @@ def download_huggingface_model(
 
     if not os.path.isabs(target_dir):
         target_dir = os.path.abspath(target_dir)
-
     os.makedirs(target_dir, exist_ok=True)
 
-    last_hf_folder = None
+    with tempfile.TemporaryDirectory(prefix="dlc_hf_") as hf_cache_dir:
+        for url in urls:
+            url = url.split("/")
+            repo_id, targzfn = url[0] + "/" + url[1], str(url[-1])
 
-    for url in urls:
-        url = url.split("/")
-        repo_id, targzfn = url[0] + "/" + url[1], str(url[-1])
+            downloaded = hf_hub_download(
+                repo_id=repo_id,
+                filename=targzfn,
+                cache_dir=hf_cache_dir,
+            )
 
-        downloaded = hf_hub_download(repo_id, targzfn, cache_dir=str(target_dir))
+            if isinstance(rename_mapping, str):
+                mapping = {targzfn: rename_mapping}
+            else:
+                mapping = rename_mapping
 
-        if isinstance(rename_mapping, str):
-            mapping = {targzfn: rename_mapping}
-        else:
-            mapping = rename_mapping
-
-        _handle_downloaded_file(downloaded, target_dir, mapping)
-
-        last_hf_folder = f"models--{url[0]}--{url[1]}"
-
-    if remove_hf_folder and last_hf_folder is not None:
-        import shutil
-        shutil.rmtree(os.path.join(target_dir, last_hf_folder), ignore_errors=True)
-
+            _handle_downloaded_file(downloaded, target_dir, mapping)

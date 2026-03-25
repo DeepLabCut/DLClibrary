@@ -171,10 +171,7 @@ def test_download_with_rename_mapping_for_pt(tmp_path, mock_modelzoo):
     assert not any(name.startswith("models--") for name in files)
 
 
-def test_keep_hf_folder_when_requested(tmp_path, mock_modelzoo):
-    """
-    If remove_hf_folder=False, the cache structure should still exist.
-    """
+def test_remove_hf_folder_flag_no_longer_affects_target_dir(tmp_path, mock_modelzoo):
     folder = tmp_path / "keep_cache"
     folder.mkdir()
 
@@ -185,4 +182,9 @@ def test_keep_hf_folder_when_requested(tmp_path, mock_modelzoo):
     )
 
     files = {p.name for p in folder.iterdir()}
-    assert any(name.startswith("models--") for name in files)
+
+    # Final artifact should still be there
+    assert "full_cat.pt" in files
+
+    # HF cache should no longer be created inside target_dir
+    assert not any(name.startswith("models--") for name in files)
