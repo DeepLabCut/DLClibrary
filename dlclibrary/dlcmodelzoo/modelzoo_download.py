@@ -121,14 +121,34 @@ def _handle_downloaded_file(
     file_name = os.path.basename(file_path)
 
     try:
-        with tarfile.open(file_path, mode="r:gz") as tar:
-            for member in tar:
+        # Be permissive about compression type
+        with tarfile.open(file_path, mode="r:*") as tar:
+            extracted_any = False
+            for member in tar.getmembers():
+                # Only extract regular files
                 if not member.isfile():
-                    fname = Path(member.name).name
-                    extracted_path = os.path.join(target_dir, fname)
-                    with tar.extractfile(member) as src, open(extracted_path, "wb") as dst:
-                        shutil.copyfileobj(src, dst)
+                    continue
+
+                fname = Path(member.name).name
+                if not fname:
+                    continue
+
+                src = tar.extractfile(member)
+                if src is None:
+                    continue
+
+                extracted_path = os.path.join(target_dir, fname)
+                with src, open(extracted_path, "wb") as dst:
+                    shutil.copyfileobj(src, dst)
+
+                extracted_any = True
+
+            # If it opened as a tar but contained nothing useful, fail loudly
+            if not extracted_any:
+                raise tarfile.ReadError(f"No regular files extracted from archive: {file_path}")
+
     except tarfile.ReadError:
+        # Not an archive -> treat as a direct model file (.pt/.pth/etc.)
         if rename_mapping is not None:
             file_name = rename_mapping.get(file_name, file_name)
         shutil.copy2(file_path, os.path.join(target_dir, file_name))
@@ -158,7 +178,7 @@ def download_huggingface_model(
 
     Examples:
         >>> # Download without renaming, keep original filename
-        download_huggingface_model("superanimal_bird_resnet_50", remove_hf_folder=False)
+        download_huggingface_model("superanimal_bird_resnet_50")
 
         >>> # Download and rename by specifying the new name directly
         download_huggingface_model(
