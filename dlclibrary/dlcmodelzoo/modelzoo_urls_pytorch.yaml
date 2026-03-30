@@ -13,7 +13,11 @@ superanimal_topviewmouse:
     fasterrcnn_resnet50_fpn_v2: mwmathis/DeepLabCutModelZoo-SuperAnimal-TopViewMouse/superanimal_topviewmouse_fasterrcnn_resnet50_fpn_v2.pt
   pose_models:
     hrnet_w32: mwmathis/DeepLabCutModelZoo-SuperAnimal-TopViewMouse/superanimal_topviewmouse_hrnet_w32.pt
+    hrnet_w48: mwmathis/DeepLabCutModelZoo-SuperAnimal-TopViewMouse/superanimal_topviewmouse_hrnet_w48.pt
     resnet_50: mwmathis/DeepLabCutModelZoo-SuperAnimal-TopViewMouse/superanimal_topviewmouse_resnet_50.pt
+    resnet_101: mwmathis/DeepLabCutModelZoo-SuperAnimal-TopViewMouse/superanimal_topviewmouse_resnet_101.pt
+    rtmpose_s: mwmathis/DeepLabCutModelZoo-SuperAnimal-TopViewMouse/superanimal_topviewmouse_rtmpose_s.pt
+    rtmpose_x: mwmathis/DeepLabCutModelZoo-SuperAnimal-TopViewMouse/superanimal_topviewmouse_rtmpose_x.pt
 
 superanimal_quadruped:
   detectors:
