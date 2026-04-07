@@ -13,6 +13,8 @@ from __future__ import annotations
 import json
 import os
 import tarfile
+import shutil
+import tempfile
 from pathlib import Path
 
 from huggingface_hub import hf_hub_download
@@ -111,34 +113,50 @@ def get_available_models(dataset: str) -> list[str]:
     return list(_load_pytorch_dataset_models(dataset)["pose_models"].keys())
 
 
+
 def _handle_downloaded_file(
     file_path: str, target_dir: str, rename_mapping: dict | None = None
 ):
-    """Handle the downloaded file from HuggingFace"""
+    """Handle the downloaded file from HuggingFace cache and place the final artifact in target_dir."""
     file_name = os.path.basename(file_path)
+
     try:
-        with tarfile.open(file_path, mode="r:gz") as tar:
-            for member in tar:
-                if not member.isdir():
-                    fname = Path(member.name).name
-                    tar.makefile(member, os.path.join(target_dir, fname))
-    except tarfile.ReadError:  # The model is a .pt file
+        # Be permissive about compression type
+        with tarfile.open(file_path, mode="r:*") as tar:
+            extracted_any = False
+            for member in tar.getmembers():
+                # Only extract regular files
+                if not member.isfile():
+                    continue
+
+                fname = Path(member.name).name
+                if not fname:
+                    continue
+
+                src = tar.extractfile(member)
+                if src is None:
+                    continue
+
+                extracted_path = os.path.join(target_dir, fname)
+                with src, open(extracted_path, "wb") as dst:
+                    shutil.copyfileobj(src, dst)
+
+                extracted_any = True
+
+            # If it opened as a tar but contained nothing useful, fail loudly
+            if not extracted_any:
+                raise tarfile.ReadError(f"No regular files extracted from archive: {file_path}")
+
+    except tarfile.ReadError:
+        # Not an archive -> treat as a direct model file (.pt/.pth/etc.)
         if rename_mapping is not None:
             file_name = rename_mapping.get(file_name, file_name)
-        if os.path.islink(file_path):
-            file_path_ = os.readlink(file_path)
-            if not os.path.isabs(file_path_):
-                file_path_ = os.path.abspath(
-                    os.path.join(os.path.dirname(file_path), file_path_)
-                )
-            file_path = file_path_
-        os.rename(file_path, os.path.join(target_dir, file_name))
+        shutil.copy2(file_path, os.path.join(target_dir, file_name))
 
 
 def download_huggingface_model(
     model_name: str,
     target_dir: str = ".",
-    remove_hf_folder: bool = True,
     rename_mapping: str | dict | None = None,
 ):
     """
@@ -151,10 +169,6 @@ def download_huggingface_model(
         target_dir (str, optional):
             Target directory where the model weights will be stored.
             Defaults to the current directory.
-        remove_hf_folder (bool, optional):
-            Whether to remove the directory structure created by HuggingFace
-            after downloading and decompressing the data into DeepLabCut format.
-            Defaults to True.
         rename_mapping (dict | str | None, optional):
             - If a dictionary, it should map the original Hugging Face filenames
               to new filenames (e.g. {"snapshot-12345.tar.gz": "mymodel.tar.gz"}).
@@ -164,7 +178,7 @@ def download_huggingface_model(
 
     Examples:
         >>> # Download without renaming, keep original filename
-        download_huggingface_model("superanimal_bird_resnet_50", remove_hf_folder=False)
+        download_huggingface_model("superanimal_bird_resnet_50")
 
         >>> # Download and rename by specifying the new name directly
         download_huggingface_model(
@@ -188,25 +202,22 @@ def download_huggingface_model(
 
     if not os.path.isabs(target_dir):
         target_dir = os.path.abspath(target_dir)
+    os.makedirs(target_dir, exist_ok=True)
 
-    for url in urls:
-        url = url.split("/")
-        repo_id, targzfn = url[0] + "/" + url[1], str(url[-1])
+    with tempfile.TemporaryDirectory(prefix="dlc_hf_") as hf_cache_dir:
+        for url in urls:
+            url = url.split("/")
+            repo_id, targzfn = url[0] + "/" + url[1], str(url[-1])
 
-        hf_hub_download(repo_id, targzfn, cache_dir=str(target_dir))
+            downloaded = hf_hub_download(
+                repo_id=repo_id,
+                filename=targzfn,
+                cache_dir=hf_cache_dir,
+            )
 
-        # Create a new subfolder as indicated below, unzipping from there and deleting this folder
-        hf_folder = f"models--{url[0]}--{url[1]}"
-        path_ = os.path.join(target_dir, hf_folder, "snapshots")
-        commit = os.listdir(path_)[0]
-        file_name = os.path.join(path_, commit, targzfn)
+            if isinstance(rename_mapping, str):
+                mapping = {targzfn: rename_mapping}
+            else:
+                mapping = rename_mapping
 
-        if isinstance(rename_mapping, str):
-            rename_mapping = {targzfn: rename_mapping}
-
-        _handle_downloaded_file(file_name, target_dir, rename_mapping)
-
-    if remove_hf_folder:
-        import shutil
-
-        shutil.rmtree(os.path.join(target_dir, hf_folder))
+            _handle_downloaded_file(downloaded, target_dir, mapping)
