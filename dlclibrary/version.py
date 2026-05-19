@@ -1,13 +1,33 @@
-#
-# DeepLabCut Toolbox (deeplabcut.org)
-# © A. & M.W. Mathis Labs
-# https://github.com/DeepLabCut/DeepLabCut
-#
-# Please see AUTHORS for contributors.
-# https://github.com/DeepLabCut/DeepLabCut/blob/master/AUTHORS
-#
-# Licensed under GNU Lesser General Public License v3.0
-#
+# Backwards compatibility shim only. Consider deprecated.
+import warnings
 
-__version__ = "0.0.12"
-VERSION = __version__
+from . import __version__ as _PACKAGE_VERSION
+from . import VERSION as _PACKAGE_VERSION_ALIAS
+
+__all__ = ["__version__", "VERSION"]
+
+
+def __getattr__(name):
+    if name == "__version__":
+        warnings.warn(
+            (
+                "'dlclibrary.version.__version__' is deprecated and will be removed "
+                "in a future release. Use 'dlclibrary.__version__' instead."
+            ),
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return _PACKAGE_VERSION
+
+    if name == "VERSION":
+        warnings.warn(
+            (
+                "'dlclibrary.version.VERSION' is deprecated and will be removed "
+                "in a future release. Use 'dlclibrary.VERSION' instead."
+            ),
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return _PACKAGE_VERSION_ALIAS
+
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
