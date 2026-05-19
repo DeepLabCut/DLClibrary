@@ -1,0 +1,47 @@
+[build-system]
+requires = [
+  "setuptools>=80",
+  "setuptools-scm>=8",
+  "wheel",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dlclibrary"
+dynamic = ["version"]
+description = "Lightweight library supporting universal functions for the DeepLabCut ecosystem"
+readme = { file = "README.md", content-type = "text/markdown" }
+authors = [
+  { name = "The DeepLabCut team", email = "admin@deeplabcut.org" }
+]
+license = { text = "GNU Lesser General Public License v3.0" }
+requires-python = ">=3.9"
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
+  "Operating System :: OS Independent",
+]
+dependencies = [
+  "huggingface_hub>=0.11.1",
+  "ruamel.yaml>=0.15.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/DeepLabCut/DLClib"
+Repository = "https://github.com/DeepLabCut/DLClib"
+
+[tool.setuptools]
+include-package-data = false
+license-files = ["LICENSE", "NOTICE.yml"]
+
+[tool.setuptools.packages.find]
+include = ["dlclibrary*"]
+
+[tool.setuptools.package-data]
+"dlclibrary.dlcmodelzoo" = [
+  "*.yaml",
+  "*.json",
+  "superanimal_configs/*.yaml",
+]
+
+[tool.setuptools_scm]
