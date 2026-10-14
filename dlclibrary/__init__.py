@@ -8,7 +8,14 @@
 #
 # Licensed under GNU Lesser General Public License v3.0
 #
+from importlib.metadata import version, PackageNotFoundError
 
+try:
+    __version__ = version("dlclibrary")
+except PackageNotFoundError:  # pragma: no cover
+    __version__ = "0+unknown"
+
+VERSION = __version__
 from dlclibrary.dlcmodelzoo.modelzoo_download import (
     download_huggingface_model,
     get_available_datasets,
@@ -16,4 +23,3 @@ from dlclibrary.dlcmodelzoo.modelzoo_download import (
     get_available_models,
     parse_available_supermodels,
 )
-from dlclibrary.version import __version__, VERSION
