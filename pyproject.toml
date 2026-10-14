@@ -1,0 +1,38 @@
+[tool.ruff]
+# TODO: @C-Achard "py310" once requires-python is ">=3.10" (CI update PR); main still tests 3.9
+target-version = "py39"
+line-length = 120
+format.docstring-code-format = true
+lint.select = [
+  "ANN",
+  "ARG",
+  "B",
+  "C4",
+  "D",
+  "DTZ",
+  "E",
+  "ERA",
+  "F",
+  "FBT",
+  "I",
+  "N",
+  "PIE",
+  "RET",
+  "RUF",
+  "SIM",
+  "UP",
+]
+lint.ignore = [
+  "B007",
+  "D100",
+  "D101",
+  "D102",
+  "D104",
+  "D106",
+  "D107",
+  "D202",
+  "E741",
+]
+lint.per-file-ignores."__init__.py" = [ "E402", "F401" ]
+lint.per-file-ignores."tests/**" = [ "D" ]
+lint.pydocstyle.convention = "google"
