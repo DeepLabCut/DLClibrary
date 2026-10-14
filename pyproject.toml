@@ -13,7 +13,6 @@ lint.select = [
   "E",
   "ERA",
   "F",
-  "FBT",
   "I",
   "N",
   "PIE",
@@ -23,6 +22,7 @@ lint.select = [
   "UP",
 ]
 lint.ignore = [
+  "ANN401",
   "B007",
   "D100",
   "D101",
@@ -32,6 +32,8 @@ lint.ignore = [
   "D107",
   "D202",
   "E741",
+  "N803",
+  "N806",
 ]
 lint.per-file-ignores."__init__.py" = [ "E402", "F401" ]
 lint.per-file-ignores."tests/**" = [ "D" ]
