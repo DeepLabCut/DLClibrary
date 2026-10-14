@@ -73,7 +73,8 @@ def _load_model_names() -> dict[str, str | list[str]]:
     return model_names
 
 
-def parse_available_supermodels():
+def parse_available_supermodels() -> dict[str, str]:
+    """Return each SuperAnimal model name mapped to its config file name in ``superanimal_configs``."""
     libpath = _get_dlclibrary_path()
     json_path = os.path.join(libpath, "dlcmodelzoo", "superanimal_models.json")
     with open(json_path) as file:
@@ -149,7 +150,7 @@ def download_huggingface_model(
     model_name: str,
     target_dir: str = ".",
     rename_mapping: str | dict | None = None,
-):
+) -> None:
     """Downloads a DeepLabCut Model Zoo Project from Hugging Face.
 
     Args:
