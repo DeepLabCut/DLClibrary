@@ -58,7 +58,6 @@ jobs:
       - name: Test
         run: pytest tests
 
-  # On tags, release-pypi.yml builds after these tests
   build:
     if: ${{ !startsWith(github.ref, 'refs/tags/') }}
     uses: ./.github/workflows/build_release.yml
