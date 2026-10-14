@@ -1,0 +1,69 @@
+name: pre-commit (PR only on changed files)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  detect_changes:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.changed_files.outputs.changed }}
+
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Detect changed files
+        id: changed_files
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          git fetch origin "$BASE_REF"
+          CHANGED_FILES=$(git diff --name-only --diff-filter=d "origin/$BASE_REF...HEAD")
+
+          delimiter="changed_$(openssl rand -hex 16)"
+          {
+            echo "changed<<$delimiter"
+            echo "$CHANGED_FILES"
+            echo "$delimiter"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Show changed files
+        env:
+          CHANGED_FILES: ${{ steps.changed_files.outputs.changed }}
+        run: |
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
+
+  precommit:
+    needs: detect_changes
+    runs-on: ubuntu-latest
+    if: ${{ needs.detect_changes.outputs.changed != '' }}
+
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v6
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install pre-commit
+        run: pip install pre-commit
+
+      - name: Run pre-commit (CI check-only stage) on changed files
+        env:
+          CHANGED_FILES: ${{ needs.detect_changes.outputs.changed }}
+        run: |
+          mapfile -t files <<< "$CHANGED_FILES"
+          pre-commit run --hook-stage manual --files "${files[@]}" --show-diff-on-failure
