@@ -11,7 +11,6 @@
 from __future__ import annotations
 
 import io
-import os
 import tarfile
 from pathlib import Path
 
@@ -22,7 +21,7 @@ import dlclibrary.dlcmodelzoo.modelzoo_download as modelzoo_download
 from dlclibrary.dlcmodelzoo.modelzoo_download import MODELOPTIONS
 
 
-def _fake_model_names():
+def _fake_model_names() -> dict[str, str]:
     """
     Return a deterministic fake URL for each model.
     Alternate between tar.gz and .pt to test both branches.
@@ -34,7 +33,7 @@ def _fake_model_names():
     return mapping
 
 
-def _write_fake_tar_gz(path: Path):
+def _write_fake_tar_gz(path: Path) -> None:
     """
     Create a fake tar.gz archive with the files the downloader expects
     for archive-based DLC models.
@@ -55,7 +54,7 @@ def _write_fake_tar_gz(path: Path):
             tar.addfile(info, io.BytesIO(content))
 
 
-def _write_fake_pt(path: Path):
+def _write_fake_pt(path: Path) -> None:
     """
     Create a fake .pt / .pth weight file.
     """
@@ -64,7 +63,7 @@ def _write_fake_pt(path: Path):
 
 
 @pytest.fixture
-def mock_modelzoo(monkeypatch):
+def mock_modelzoo(monkeypatch: pytest.MonkeyPatch) -> dict[str, str]:
     """
     Patch both:
       - model name resolution
@@ -76,7 +75,7 @@ def mock_modelzoo(monkeypatch):
 
     monkeypatch.setattr(modelzoo_download, "_load_model_names", lambda: fake_names)
 
-    def fake_hf_hub_download(repo_id, filename, cache_dir):
+    def fake_hf_hub_download(repo_id: str, filename: str, cache_dir: str) -> str:
         cache_dir = Path(cache_dir)
         hf_folder = cache_dir / f"models--{repo_id.replace('/', '--')}"
         snapshot_dir = hf_folder / "snapshots" / "fakecommit123"
@@ -84,7 +83,7 @@ def mock_modelzoo(monkeypatch):
 
         if filename.endswith(".tar.gz"):
             _write_fake_tar_gz(returned_file)
-        elif filename.endswith(".pt") or filename.endswith(".pth"):
+        elif filename.endswith((".pt", ".pth")):
             _write_fake_pt(returned_file)
         else:
             raise AssertionError(f"Unexpected mocked filename: {filename}")
@@ -96,7 +95,7 @@ def mock_modelzoo(monkeypatch):
     return fake_names
 
 
-def _assert_download_success(folder: Path, model: str):
+def _assert_download_success(folder: Path, model: str) -> None:
     """
     Shared assertion helper for download_huggingface_model.
     """
@@ -117,7 +116,8 @@ def _assert_download_success(folder: Path, model: str):
     assert not any(name.startswith("models--") for name in files)
 
 
-def test_download_huggingface_model_tar_or_pt(tmp_path, mock_modelzoo):
+@pytest.mark.usefixtures("mock_modelzoo")
+def test_download_huggingface_model_tar_or_pt(tmp_path: Path) -> None:
     folder = tmp_path / "download_one"
     folder.mkdir()
 
@@ -126,25 +126,28 @@ def test_download_huggingface_model_tar_or_pt(tmp_path, mock_modelzoo):
     _assert_download_success(folder, "full_cat")
 
 
-def test_download_huggingface_wrong_model(mock_modelzoo):
+@pytest.mark.usefixtures("mock_modelzoo")
+def test_download_huggingface_wrong_model() -> None:
     with pytest.raises(ValueError):
         dlclibrary.download_huggingface_model("wrong_model_name")
 
 
-def test_parse_superanimal_models():
+def test_parse_superanimal_models() -> None:
     dict_ = dlclibrary.parse_available_supermodels()
     assert "superanimal_quadruped" in dict_
     assert "superanimal_topviewmouse" in dict_
 
 
+@pytest.mark.usefixtures("mock_modelzoo")
 @pytest.mark.parametrize("model", MODELOPTIONS)
-def test_download_all_models(tmp_path, mock_modelzoo, model):
+def test_download_all_models(tmp_path: Path, model: str) -> None:
     folder = tmp_path / model
     folder.mkdir()
     _assert_download_success(folder, model)
 
 
-def test_download_with_rename_mapping_for_pt(tmp_path, mock_modelzoo):
+@pytest.mark.usefixtures("mock_modelzoo")
+def test_download_with_rename_mapping_for_pt(tmp_path: Path) -> None:
     """
     Explicitly test rename_mapping for a .pt model.
     """

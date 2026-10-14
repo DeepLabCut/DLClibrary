@@ -16,4 +16,4 @@ from dlclibrary.dlcmodelzoo.modelzoo_download import (
     get_available_models,
     parse_available_supermodels,
 )
-from dlclibrary.version import __version__, VERSION
+from dlclibrary.version import VERSION, __version__
