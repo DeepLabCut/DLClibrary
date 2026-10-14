@@ -24,8 +24,7 @@ import yaml
 
 def load_config(filename):
     with open(filename) as fh:
-        config = yaml.safe_load(fh)
-    return config
+        return yaml.safe_load(fh)
 
 
 def walk_directory(entry):
@@ -39,8 +38,7 @@ def walk_directory(entry):
     def _list_include():
         """List all files specified in the include list."""
         for include_pattern in entry["include"]:
-            for filename in glob.iglob(include_pattern, recursive=True):
-                yield filename
+            yield from glob.iglob(include_pattern, recursive=True)
 
     def _filter_exclude(iterable):
         """Filter filenames from an iterator by the exclude patterns."""
@@ -63,7 +61,7 @@ def main(input_file="NOTICE.yml"):
             header_file.write(entry["header"])
             header_file.flush()
             header_file.seek(0)
-            command = ["licenseheaders", "-t", str(header_file.name), "-f"] + filelist
+            command = ["licenseheaders", "-t", str(header_file.name), "-f", *filelist]
             result = subprocess.run(command, capture_output=True)
             if result.returncode != 0:
                 print(result.stdout.decode())

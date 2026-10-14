@@ -35,8 +35,8 @@ MODELOPTIONS = [
 ]
 
 
-def _get_dlclibrary_path():
-    """Get path of where dlclibrary (this repo) is currently running"""
+def _get_dlclibrary_path() -> str:
+    """Get path of where dlclibrary (this repo) is currently running."""
     import importlib.util
 
     return os.path.split(importlib.util.find_spec("dlclibrary").origin)[0]
@@ -46,9 +46,7 @@ def _load_pytorch_models() -> dict[str, dict[str, dict[str, str]]]:
     """Load URLs and commit hashes for available models."""
     urls = Path(_get_dlclibrary_path()) / "dlcmodelzoo" / "modelzoo_urls_pytorch.yaml"
     with open(urls) as file:
-        data = YAML(pure=True).load(file)
-
-    return data
+        return YAML(pure=True).load(file)
 
 
 def _load_pytorch_dataset_models(dataset: str) -> dict[str, dict[str, str]]:
@@ -60,7 +58,7 @@ def _load_pytorch_dataset_models(dataset: str) -> dict[str, dict[str, str]]:
     return models[dataset]
 
 
-def _load_model_names():
+def _load_model_names() -> dict[str, str | list[str]]:
     """Load URLs and commit hashes for available models."""
     fn = os.path.join(_get_dlclibrary_path(), "dlcmodelzoo", "modelzoo_urls.yaml")
     with open(fn) as file:
@@ -79,8 +77,7 @@ def parse_available_supermodels():
     libpath = _get_dlclibrary_path()
     json_path = os.path.join(libpath, "dlcmodelzoo", "superanimal_models.json")
     with open(json_path) as file:
-        super_animal_models = json.load(file)
-    return super_animal_models
+        return json.load(file)
 
 
 def get_available_datasets() -> list[str]:
@@ -110,7 +107,7 @@ def get_available_models(dataset: str) -> list[str]:
     return list(_load_pytorch_dataset_models(dataset)["pose_models"].keys())
 
 
-def _handle_downloaded_file(file_path: str, target_dir: str, rename_mapping: dict | None = None):
+def _handle_downloaded_file(file_path: str, target_dir: str, rename_mapping: dict | None = None) -> None:
     """Handle the downloaded file from HuggingFace cache and place the final artifact in target_dir."""
     file_name = os.path.basename(file_path)
 
@@ -186,10 +183,7 @@ def download_huggingface_model(
 
     print("Loading....", model_name)
     urls = net_urls[model_name]
-    if isinstance(urls, CommentedBase):
-        urls = list(urls)
-    else:
-        urls = [urls]
+    urls = list(urls) if isinstance(urls, CommentedBase) else [urls]
 
     if not os.path.isabs(target_dir):
         target_dir = os.path.abspath(target_dir)
@@ -206,9 +200,6 @@ def download_huggingface_model(
                 cache_dir=hf_cache_dir,
             )
 
-            if isinstance(rename_mapping, str):
-                mapping = {targzfn: rename_mapping}
-            else:
-                mapping = rename_mapping
+            mapping = {targzfn: rename_mapping} if isinstance(rename_mapping, str) else rename_mapping
 
             _handle_downloaded_file(downloaded, target_dir, mapping)

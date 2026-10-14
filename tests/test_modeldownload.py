@@ -83,7 +83,7 @@ def mock_modelzoo(monkeypatch):
 
         if filename.endswith(".tar.gz"):
             _write_fake_tar_gz(returned_file)
-        elif filename.endswith(".pt") or filename.endswith(".pth"):
+        elif filename.endswith((".pt", ".pth")):
             _write_fake_pt(returned_file)
         else:
             raise AssertionError(f"Unexpected mocked filename: {filename}")
