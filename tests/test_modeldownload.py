@@ -11,7 +11,6 @@
 from __future__ import annotations
 
 import io
-import os
 import tarfile
 from pathlib import Path
 

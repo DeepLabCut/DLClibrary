@@ -35,8 +35,8 @@ model_dir.mkdir()
 download_huggingface_model("superanimal_quadruped", model_dir)
 ```
 
-PyTorch models available for a given dataset (compatible with DeepLabCut>=3.0) can be 
-listed using the `dlclibrary.get_available_detectors` and 
+PyTorch models available for a given dataset (compatible with DeepLabCut>=3.0) can be
+listed using the `dlclibrary.get_available_detectors` and
 `dlclibrary.get_available_models` methods. The datasets for which models are available
 can be listed using `dlclibrary.get_available_datasets`. Example use:
 
@@ -57,7 +57,7 @@ can be listed using `dlclibrary.get_available_datasets`. Example use:
 
 ### TensorFlow models
 
-Pick a good model_name. Follow the (novel) naming convention (modeltype_species), e.g. ```superanimal_topviewmouse```.  
+Pick a good model_name. Follow the (novel) naming convention (modeltype_species), e.g. ```superanimal_topviewmouse```.
 
 1. Add the model_name with path and commit ID to: https://github.com/DeepLabCut/DLClibrary/blob/main/dlclibrary/dlcmodelzoo/modelzoo_urls.yaml
 
@@ -88,8 +88,8 @@ i.e. for this example 3 models would be available: `my_cool_dataset_detector_nam
 To add a new model for `deeplabcut >= 3.0.0`, simply:
 
 - add a new line under detectors or pose models if the dataset is already defined
-- add the structure if the model was trained on a new dataset 
+- add the structure if the model was trained on a new dataset
 
 The models will then be listed when calling `dlclibrary.get_available_detectors` or
-`dlclibrary.get_available_models`! You can list the datasets for which models are 
+`dlclibrary.get_available_models`! You can list the datasets for which models are
 available using `dlclibrary.get_available_datasets`.

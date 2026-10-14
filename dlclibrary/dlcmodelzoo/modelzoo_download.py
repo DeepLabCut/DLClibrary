@@ -12,8 +12,8 @@ from __future__ import annotations
 
 import json
 import os
-import tarfile
 import shutil
+import tarfile
 import tempfile
 from pathlib import Path
 
@@ -54,11 +54,8 @@ def _load_pytorch_models() -> dict[str, dict[str, dict[str, str]]]:
 def _load_pytorch_dataset_models(dataset: str) -> dict[str, dict[str, str]]:
     """Load URLs and commit hashes for available models."""
     models = _load_pytorch_models()
-    if not dataset in models:
-        raise ValueError(
-            f"Could not find any models for {dataset}. Models are available for "
-            f"{list(models.keys())}"
-        )
+    if dataset not in models:
+        raise ValueError(f"Could not find any models for {dataset}. Models are available for {list(models.keys())}")
 
     return models[dataset]
 
@@ -113,10 +110,7 @@ def get_available_models(dataset: str) -> list[str]:
     return list(_load_pytorch_dataset_models(dataset)["pose_models"].keys())
 
 
-
-def _handle_downloaded_file(
-    file_path: str, target_dir: str, rename_mapping: dict | None = None
-):
+def _handle_downloaded_file(file_path: str, target_dir: str, rename_mapping: dict | None = None):
     """Handle the downloaded file from HuggingFace cache and place the final artifact in target_dir."""
     file_name = os.path.basename(file_path)
 
@@ -159,8 +153,7 @@ def download_huggingface_model(
     target_dir: str = ".",
     rename_mapping: str | dict | None = None,
 ):
-    """
-    Downloads a DeepLabCut Model Zoo Project from Hugging Face.
+    """Downloads a DeepLabCut Model Zoo Project from Hugging Face.
 
     Args:
         model_name (str):
@@ -189,9 +182,7 @@ def download_huggingface_model(
     """
     net_urls = _load_model_names()
     if model_name not in net_urls:
-        raise ValueError(
-            f"`modelname={model_name}` should be one of: {', '.join(net_urls)}."
-        )
+        raise ValueError(f"`modelname={model_name}` should be one of: {', '.join(net_urls)}.")
 
     print("Loading....", model_name)
     urls = net_urls[model_name]
