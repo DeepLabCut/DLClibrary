@@ -1,54 +1,52 @@
 name: Release
 
 on:
-  pull_request:
-    branches:
-      - main
   push:
     tags:
       - "v*.*.*"
-  workflow_dispatch:
 
 permissions:
   contents: read
 
-concurrency:
-  group: release-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
-  build-and-publish:
+  tests:
+    uses: ./.github/workflows/test_package.yml
+
+  build:
+    needs: [tests]
+    uses: ./.github/workflows/build_release.yml
+
+  publish:
+    needs: [build]
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Check out source
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
+    concurrency:
+      group: pypi-deploy
+      cancel-in-progress: false
 
-      - name: Set up Python
-        uses: actions/setup-python@v6
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-          cache: "pip"
 
-      - name: Install build tooling
+      - name: Check the PyPI token is set
+        env:
+          TWINE_PASSWORD: ${{ secrets.TWINE_API_KEY }}
         run: |
-          python -m pip install --upgrade pip
-          python -m pip install build twine setuptools-scm
-
-      - name: Show SCM-derived version
-        run: python -m setuptools_scm
-
-      - name: Build distributions
-        run: python -m build
-
-      - name: Check built distributions
-        run: python -m twine check dist/*
+          if [ -z "$TWINE_PASSWORD" ]; then
+            echo "::error::secrets.TWINE_API_KEY is empty"
+            exit 1
+          fi
 
       - name: Publish to PyPI
-        if: startsWith(github.ref, 'refs/tags/v')
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.TWINE_API_KEY }}
-        run: python -m twine upload --non-interactive dist/*
+        run: |
+          python -m pip install --upgrade pip twine
+          python -m twine upload --non-interactive dist/*
