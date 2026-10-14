@@ -1,0 +1,107 @@
+name: weekly checks
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+    inputs:
+      simulate_failure:
+        description: "Skip the checks, fail on purpose, and open a test tracking issue"
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  dependency-prereleases:
+    if: ${{ !inputs.simulate_failure }}
+    name: dependency pre-releases py3.12
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: astral-sh/setup-uv@v7
+        with:
+          python-version: "3.12"
+          activate-environment: true
+
+      - name: Install with pre-releases allowed
+        run: uv pip install --prerelease allow . "pytest>=8"
+
+      # `-o filterwarnings`, not `-W`: `-W` matches the module name exactly and would miss every submodule
+      - name: Test
+        run: |
+          pytest tests -o $'filterwarnings=error::DeprecationWarning:dlclibrary\nerror::FutureWarning:dlclibrary'
+
+  build-release:
+    if: ${{ !inputs.simulate_failure }}
+    uses: ./.github/workflows/build_release.yml
+
+  simulate-failure:
+    if: ${{ inputs.simulate_failure }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+
+  notify:
+    # A job of its own: a step-level `if: failure()` never runs when its job dies before reaching it
+    needs: [dependency-prereleases, build-release, simulate-failure]
+    if: failure() && (github.event_name == 'schedule' || inputs.simulate_failure)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+
+    steps:
+      - name: Open or update the tracking issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          PRERELEASE_RESULT: ${{ needs['dependency-prereleases'].result }}
+          BUILD_RESULT: ${{ needs['build-release'].result }}
+          SIMULATED: ${{ inputs.simulate_failure }}
+        run: |
+          set -euo pipefail
+          if [ "$SIMULATED" = "true" ]; then
+            title="Weekly checks failing (notification test)"
+            label="weekly checks test"
+            banner="> **Test.** Opened by a manual dispatch with *simulate_failure*; nothing is broken. Close it."
+          else
+            title="Weekly checks failing"
+            label="weekly checks"
+            banner=""
+          fi
+          gh label create "$label" --repo "$REPO" --color B60205 \
+            --description "Tracking issue for the weekly CI checks" --force
+
+          summary=$(printf '%s\n' \
+            "| Check | Result |" \
+            "| --- | --- |" \
+            "| dependency pre-releases | $PRERELEASE_RESULT |" \
+            "| build and test release | $BUILD_RESULT |")
+
+          existing=$(gh issue list --repo "$REPO" --state open --label "$label" --json number --jq '.[0].number // empty')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --repo "$REPO" --body "$(printf '%s\n' "Still failing: [run $GITHUB_RUN_ID]($RUN_URL)" "" "$summary")"
+          else
+            body=$(printf '%s\n' \
+              "Weekly checks failed: [run $GITHUB_RUN_ID]($RUN_URL)" \
+              "" \
+              "$summary" \
+              "" \
+              "These run against dependency pre-releases and the built wheel: a failure is usually an upstream change or a packaging problem, not a regression from a PR." \
+              "" \
+              "## Resolving" \
+              "" \
+              "1. Fix the failing job on a branch." \
+              "2. Re-run the check on that branch: Actions -> build and test release -> Run workflow, or Actions -> weekly checks -> Run workflow." \
+              "3. Merge the fix, dispatch Actions -> weekly checks on main, and close this issue. While it is open, later failures are added as comments.")
+            if [ -n "$banner" ]; then
+              body=$(printf '%s\n' "$banner" "" "$body")
+            fi
+            gh issue create --repo "$REPO" --title "$title" --body "$body" --label "$label"
+          fi
