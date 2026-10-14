@@ -18,29 +18,31 @@ import fnmatch
 import glob
 import subprocess
 import tempfile
+from collections.abc import Iterable, Iterator
 
 import yaml
 
 
-def load_config(filename):
+def load_config(filename: str) -> list[dict]:
+    """Load the list of header entries from a NOTICE.yml file."""
     with open(filename) as fh:
         return yaml.safe_load(fh)
 
 
-def walk_directory(entry):
-    """Walk the directory"""
+def walk_directory(entry: dict) -> list[str]:
+    """List the files an entry includes, minus those it excludes."""
 
     if "header" not in entry:
         raise ValueError("Current entry does not have a header.")
     if "include" not in entry:
         raise ValueError("Current entry does not have an include list.")
 
-    def _list_include():
+    def _list_include() -> Iterator[str]:
         """List all files specified in the include list."""
         for include_pattern in entry["include"]:
             yield from glob.iglob(include_pattern, recursive=True)
 
-    def _filter_exclude(iterable):
+    def _filter_exclude(iterable: Iterable[str]) -> Iterator[str]:
         """Filter filenames from an iterator by the exclude patterns."""
         for filename in iterable:
             for exclude_pattern in entry.get("exclude", []):
@@ -53,7 +55,8 @@ def walk_directory(entry):
     return list(files)
 
 
-def main(input_file="NOTICE.yml"):
+def main(input_file: str = "NOTICE.yml") -> None:
+    """Write each entry's header into the files it covers, with licenseheaders."""
     config = load_config(input_file)
     for entry in config:
         filelist = list(walk_directory(entry))
