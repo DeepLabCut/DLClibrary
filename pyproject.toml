@@ -26,7 +26,10 @@ classifiers = [
 ]
 dependencies = [
   "huggingface_hub>=0.11.1",
+  "numpy>=1.22.4",
+  "pydantic>=2,<3",
   "ruamel.yaml>=0.16",
+  "typing_extensions",
 ]
 
 [project.urls]
