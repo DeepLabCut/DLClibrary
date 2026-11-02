@@ -1,7 +1,7 @@
 [![Generic badge](https://img.shields.io/badge/Contributions-Welcome-brightgreen.svg)](README.md)
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>[![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
 
-# DLClibrary
+# DLClibrary: the API interface for DeepLabCut ModelZoo models on HuggingFace
 
 DLClibrary is a lightweight library supporting an API for downloading model weights from [the model zoo](http://www.mackenziemathislab.org/dlc-modelzoo)
 
@@ -89,3 +89,22 @@ To add a new model for `deeplabcut >= 3.0.0`, simply:
 The models will then be listed when calling `dlclibrary.get_available_detectors` or
 `dlclibrary.get_available_models`! You can list the datasets for which models are 
 available using `dlclibrary.get_available_datasets`.
+
+## Citation
+
+If you use SuperAnimal, please cite:
+
+```bibtex
+@article{ye2024superanimal,
+  title   = {SuperAnimal pretrained pose estimation models for behavioral analysis},
+  author  = {Ye, Shaokai and Filippova, Anastasiia and Lauer, Jessy and Schneider, Steffen and Vidal, Maxime and Qiu, Tian and Mathis, Alexander and Mathis, Mackenzie Weygandt},
+  journal = {Nature Communications},
+  volume  = {15},
+  number  = {1},
+  pages   = {5165},
+  year    = {2024},
+  doi     = {10.1038/s41467-024-48792-2}
+}
+```
+
+
