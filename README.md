@@ -71,7 +71,7 @@ https://github.com/DeepLabCut/DLClibrary/blob/main/dlclibrary/dlcmodelzoo/modelz
 ```yaml
 my_cool_dataset:  # name of the dataset used to train the model
   detectors:
-    detector_name: path/to/huggingface-detector.pt  # add detectors under `detector`
+    detector_name: path/to/huggingface-detector.pt  # add detectors under `detectors`
   pose_models:
     pose_model_name: path/to/huggingface-pose-model.pt  # add pose models under `pose_models`
     other_pose_model_name: path/to/huggingface-other-pose-model.pt
