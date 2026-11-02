@@ -35,6 +35,18 @@ repos:
       - id: validate-pyproject
         stages: [pre-commit, manual]
 
+  - repo: local
+    hooks:
+      # Checks every file NOTICE.yml covers, not only the changed ones; add headers with tools/update_license_headers.py
+      - id: license-headers
+        name: license headers (NOTICE.yml)
+        entry: python tools/check_license_headers.py
+        language: python
+        additional_dependencies: [pyyaml]
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit, manual]
+
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.15.6
     hooks:
