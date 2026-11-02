@@ -77,7 +77,7 @@ my_cool_dataset:  # name of the dataset used to train the model
     other_pose_model_name: path/to/huggingface-other-pose-model.pt
 ```
 
-This will allow users to download the models using the format `datatsetName_modelName`,
+This will allow users to download the models using the format `datasetName_modelName`,
 i.e. for this example 3 models would be available: `my_cool_dataset_detector_name`,
 `my_cool_dataset_pose_model_name` and `my_cool_dataset_other_pose_model_name`.
 
