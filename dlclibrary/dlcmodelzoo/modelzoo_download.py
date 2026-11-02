@@ -12,8 +12,8 @@ from __future__ import annotations
 
 import json
 import os
-import tarfile
 import shutil
+import tarfile
 import tempfile
 from pathlib import Path
 
@@ -35,8 +35,8 @@ MODELOPTIONS = [
 ]
 
 
-def _get_dlclibrary_path():
-    """Get path of where dlclibrary (this repo) is currently running"""
+def _get_dlclibrary_path() -> str:
+    """Get path of where dlclibrary (this repo) is currently running."""
     import importlib.util
 
     return os.path.split(importlib.util.find_spec("dlclibrary").origin)[0]
@@ -46,24 +46,19 @@ def _load_pytorch_models() -> dict[str, dict[str, dict[str, str]]]:
     """Load URLs and commit hashes for available models."""
     urls = Path(_get_dlclibrary_path()) / "dlcmodelzoo" / "modelzoo_urls_pytorch.yaml"
     with open(urls) as file:
-        data = YAML(pure=True).load(file)
-
-    return data
+        return YAML(pure=True).load(file)
 
 
 def _load_pytorch_dataset_models(dataset: str) -> dict[str, dict[str, str]]:
     """Load URLs and commit hashes for available models."""
     models = _load_pytorch_models()
-    if not dataset in models:
-        raise ValueError(
-            f"Could not find any models for {dataset}. Models are available for "
-            f"{list(models.keys())}"
-        )
+    if dataset not in models:
+        raise ValueError(f"Could not find any models for {dataset}. Models are available for {list(models.keys())}")
 
     return models[dataset]
 
 
-def _load_model_names():
+def _load_model_names() -> dict[str, str | list[str]]:
     """Load URLs and commit hashes for available models."""
     fn = os.path.join(_get_dlclibrary_path(), "dlcmodelzoo", "modelzoo_urls.yaml")
     with open(fn) as file:
@@ -78,12 +73,12 @@ def _load_model_names():
     return model_names
 
 
-def parse_available_supermodels():
+def parse_available_supermodels() -> dict[str, str]:
+    """Return each SuperAnimal model name mapped to its config file name in ``superanimal_configs``."""
     libpath = _get_dlclibrary_path()
     json_path = os.path.join(libpath, "dlcmodelzoo", "superanimal_models.json")
     with open(json_path) as file:
-        super_animal_models = json.load(file)
-    return super_animal_models
+        return json.load(file)
 
 
 def get_available_datasets() -> list[str]:
@@ -113,10 +108,7 @@ def get_available_models(dataset: str) -> list[str]:
     return list(_load_pytorch_dataset_models(dataset)["pose_models"].keys())
 
 
-
-def _handle_downloaded_file(
-    file_path: str, target_dir: str, rename_mapping: dict | None = None
-):
+def _handle_downloaded_file(file_path: str, target_dir: str, rename_mapping: dict | None = None) -> None:
     """Handle the downloaded file from HuggingFace cache and place the final artifact in target_dir."""
     file_name = os.path.basename(file_path)
 
@@ -158,9 +150,8 @@ def download_huggingface_model(
     model_name: str,
     target_dir: str = ".",
     rename_mapping: str | dict | None = None,
-):
-    """
-    Downloads a DeepLabCut Model Zoo Project from Hugging Face.
+) -> None:
+    """Downloads a DeepLabCut Model Zoo Project from Hugging Face.
 
     Args:
         model_name (str):
@@ -189,16 +180,11 @@ def download_huggingface_model(
     """
     net_urls = _load_model_names()
     if model_name not in net_urls:
-        raise ValueError(
-            f"`modelname={model_name}` should be one of: {', '.join(net_urls)}."
-        )
+        raise ValueError(f"`modelname={model_name}` should be one of: {', '.join(net_urls)}.")
 
     print("Loading....", model_name)
     urls = net_urls[model_name]
-    if isinstance(urls, CommentedBase):
-        urls = list(urls)
-    else:
-        urls = [urls]
+    urls = list(urls) if isinstance(urls, CommentedBase) else [urls]
 
     if not os.path.isabs(target_dir):
         target_dir = os.path.abspath(target_dir)
@@ -215,9 +201,6 @@ def download_huggingface_model(
                 cache_dir=hf_cache_dir,
             )
 
-            if isinstance(rename_mapping, str):
-                mapping = {targzfn: rename_mapping}
-            else:
-                mapping = rename_mapping
+            mapping = {targzfn: rename_mapping} if isinstance(rename_mapping, str) else rename_mapping
 
             _handle_downloaded_file(downloaded, target_dir, mapping)
