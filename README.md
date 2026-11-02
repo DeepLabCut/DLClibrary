@@ -3,11 +3,7 @@
 
 # DLClibrary
 
-DLClibrary is a lightweight library supporting universal functions for the [DeepLabCut](https://github.com/DeepLabCut/DeepLabCut) ecosystem.
-
-Supported functions (at this point):
-
-- API for downloading model weights from [the model zoo](http://www.mackenziemathislab.org/dlc-modelzoo)
+DLClibrary is a lightweight library supporting an API for downloading model weights from [the model zoo](http://www.mackenziemathislab.org/dlc-modelzoo)
 
 # Quick start
 
