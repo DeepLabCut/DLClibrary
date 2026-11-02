@@ -1,7 +1,7 @@
 [![Generic badge](https://img.shields.io/badge/Contributions-Welcome-brightgreen.svg)](README.md)
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>[![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
 
-# DLClibrary: the API interface for DeepLabCut ModelZoo models on HuggingFace
+# DLClibrary: the API interface for DeepLabCut ModelZoo models on Hugging Face
 
 DLClibrary is a lightweight library supporting an API for downloading model weights from [the model zoo](http://www.mackenziemathislab.org/dlc-modelzoo)
 
